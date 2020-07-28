@@ -11,7 +11,6 @@ const styles = {
         borderRadius: '2px',
         borderColor: 'lightblue',
         padding: '5px 5px',
-        width: '95%',
         margin: '2px 2px',
         display: 'flex',
         flexDirection: 'column',

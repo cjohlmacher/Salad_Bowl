@@ -34,7 +34,7 @@ const InteractionCounter = (props) => {
   }
 
   return (
-    <div>
+    <div style={styles}>
       {viewsText}
     </div>
   );

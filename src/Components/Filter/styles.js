@@ -1,7 +1,10 @@
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 
+
+
 const styles = {
   active: {
+    display: 'flex',
     backgroundColor: 'pink',
     color: 'black',
     borderRadius: '10px',
@@ -9,8 +12,10 @@ const styles = {
     margin: '2px 10px',
     height: '35px',
     textAlign: 'center',
+    alignItems: 'center',
   },
   inactive: {
+    display: 'flex',
     backgroundColor: 'lightgrey',
     color: 'black',
     borderRadius: '10px',
@@ -18,10 +23,10 @@ const styles = {
     margin: '2px 5px',
     height: '35px',
     textAlign: 'center',
+    alignItems: 'center',
   },
   text: {
     margin: '0px 0px',
-    display: 'inline-block',
   },
 };
 

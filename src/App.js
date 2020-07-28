@@ -24,7 +24,7 @@ import CommunityBar from './Components/CommunityBar';
 
 function App() {
   return (
-    <div className="App" style={{width:'98vw',}}>
+    <div className="App">
       <Header 
         greeting="What's up, Chicago!"
       >
