@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 import NewsStory from './Components/NewsStory'
@@ -23,6 +23,18 @@ import CommunityBar from './Components/CommunityBar';
 
 
 function App() {
+  const [healthFilterEnabled, setHealthFilter] = useState(false);
+  const [techFilterEnabled, setTechFilter] = useState(false);
+
+  const handleHealthFilterClick = () => {
+    const newHealthFilterValue = !healthFilterEnabled; // the opposite of whatever's in state 
+    setHealthFilter(newHealthFilterValue);
+  };
+
+  const handleTechFilterClick = () => {
+    setTechFilter(!techFilterEnabled);
+  };
+
   return (
     <div className="App">
       <Header 
@@ -37,10 +49,13 @@ function App() {
           <NewsFeed>
             <FilterBar>
               <Filter
+                active={healthFilterEnabled}
+                onToggleFilter={handleHealthFilterClick}
                 topic="Health"
-                active={true}
               />
               <Filter
+                active={techFilterEnabled}
+                onToggleFilter={handleTechFilterClick}
                 topic="Tech"
               />
               <Filter
@@ -58,7 +73,7 @@ function App() {
               />
             </FilterBar>
 
-            <NewsStory >
+            <NewsStory>
               <Headline title="Suntan Lotion cures Smallpox" subTitle="Nosun Nemore"/>
               <MainStory summary="Studies show that suntan lotion applied on the elbow and armpit is able to reverse the..."/>
               <CommunityBar>
