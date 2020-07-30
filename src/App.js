@@ -20,99 +20,293 @@ import ResponseButton from './Components/ResponseButton';
 import MainStory from './Components/MainStory';
 import InteractionCounter from './Components/InteractionCounter';
 import CommunityBar from './Components/CommunityBar';
-
+import CommentBar from './Components/CommentBar/CommentBar';
+import ShareBar from './Components/ShareBar';
+import Menu from './Components/Menu';
 
 function App() {
-  const [healthFilterEnabled, setHealthFilter] = useState(false);
-  const [techFilterEnabled, setTechFilter] = useState(false);
+  
 
-  const handleHealthFilterClick = () => {
-    const newHealthFilterValue = !healthFilterEnabled; // the opposite of whatever's in state 
-    setHealthFilter(newHealthFilterValue);
+  //News Filter Creation
+  const newsFilterList = [
+    {
+      name: "Health",
+      state: useState(false),
+    },
+    {
+      name: "Tech",
+      state: useState(false),
+    },
+    {
+      name: "Politics",
+      state: useState(false),
+    },
+    {
+      name: "International",
+      state: useState(false),
+    },
+    {
+      name: "Local",
+      state: useState(false),
+    },
+    {
+      name: "Science",
+      state: useState(false),
+    }
+  ];
+
+
+  const filterNewsComponents = newsFilterList.map(function (filter) {
+        
+    const handleFilterClick = () => {
+      filter.state[1](!filter.state[0])
+    }
+
+    return (
+      <Filter
+        active={filter.state[0]}
+        onToggleFilter={handleFilterClick}
+        topic={filter.name}
+      />
+    );
+  });
+
+  //Events Filter Creation
+  const eventsFilterList = [
+    {
+      name: "Outdoors",
+      state: useState(false),
+    },
+    {
+      name: "21+",
+      state: useState(false),
+    },
+    {
+      name: "Athletic",
+      state: useState(false),
+    },
+    {
+      name: "Hobby",
+      state: useState(false),
+    },
+    {
+      name: "Art",
+      state: useState(false),
+    },
+    {
+      name: "Food",
+      state: useState(false),
+    }
+  ];
+
+
+  const filterEventsComponents = eventsFilterList.map(function (filter) {
+        
+    const handleFilterClick = () => {
+      filter.state[1](!filter.state[0])
+    }
+
+    return (
+      <Filter
+        active={filter.state[0]}
+        onToggleFilter={handleFilterClick}
+        topic={filter.name}
+      />
+    );
+  });
+
+  //CommentBar
+
+  const newsStoryList = [
+    {
+      headlineTitle: "Suntan Lotion cures Smallpox",
+      headlineSubtitle: "Nosun Nemore",
+      mainStorySummary: "Studies show that suntan lotion applied on the elbow and armpit is able to reverse the...",
+      interactionCount: 3,
+      commentState: useState(false),
+      shareState: useState(false),
+    },
+    {
+      headlineTitle: "Dog Saves Bear from Avalanche",
+      headlineSubtitle: "Fido Smokey",
+      mainStorySummary: "An inspiring story coming out of Lake Tahoe this weekend. A bear nearly swallowed by an...",
+      interactionCount: 0,
+      commentState: useState(false),
+      shareState: useState(false),
+    },
+    {
+      headlineTitle: "Listening to Dua Lipa causes Mumps",
+      headlineSubtitle: "NuRules Icountem",
+      mainStorySummary: "Studies show that suntan lotion applied on the elbow and armpit is able to reverse the...",
+      interactionCount: 1,
+      commentState: useState(false),
+      shareState: useState(false),
+    },
+    {
+      headlineTitle: "Mailman Wins Lottery - Shares With Dog",
+      headlineSubtitle: "Foo Foo",
+      mainStorySummary: "A local mailman had the winning ticket in Tuesday's lotto taking in over 64 million...",
+      interactionCount: 100,
+      commentState: useState(false),
+      shareState: useState(false),
+    },
+  ];  
+
+  const newsStoryComponents = newsStoryList.map(function (story) {
+        
+    const handleCommentButtonPress = () => {
+      story.commentState[1](!story.commentState[0]);
+    };
+
+    const handleShareButtonPress = () => {
+      story.shareState[1](!story.shareState[0]);
+    }
+
+    return (
+      <NewsStory>
+              <Headline title={story.headlineTitle} subTitle={story.headlineSubtitle}/>
+              <MainStory summary={story.mainStorySummary}/>
+              <CommunityBar>
+                <InteractionCounter count={story.interactionCount} type='news'/>
+                <ResponseButton 
+                  type='comment'
+                  onResponseButtonPress={handleCommentButtonPress}
+                />
+                <ResponseButton 
+                  type='share'
+                  onResponseButtonPress={handleShareButtonPress}
+                />
+              </CommunityBar>
+              <CommentBar
+                active={story.commentState[0]}
+              />
+              <ShareBar
+                active={story.shareState[0]}
+              />
+            </NewsStory>
+    );
+  });
+
+//Events
+
+const eventsList = [
+  {
+    eventName: "Picnic in the Park ",
+    eventStartTime: "3:00PM",
+    eventLocation: "Somerville",
+    attendanceCount: 20,
+    rsvpState: useState(false),
+    commentState: useState(false),
+    shareState: useState(false),
+  },
+  {
+    eventName: "Hot Wings Challenge",
+    eventStartTime: "6:00PM",
+    eventLocation: "Boston Commons",
+    attendanceCount: 9,
+    rsvpState: useState(false),
+    commentState: useState(false),
+    shareState: useState(false),
+  },
+  {
+    eventName: "Poetry Slam",
+    eventStartTime: "10:00PM",
+    eventLocation: "Howl at the Moon",
+    attendanceCount: 0,
+    rsvpState: useState(false),
+    commentState: useState(false),
+    shareState: useState(false),
+  },
+  {
+    eventName: "Carpool Karaoke",
+    eventStartTime: "11:00AM",
+    eventLocation: "Massachusetts Avenue",
+    attendanceCount: 1,
+    rsvpState: useState(false),
+    commentState: useState(false),
+    shareState: useState(false),
+  },
+];  
+
+const eventComponents = eventsList.map(function (specificEvent) {
+      
+  const handleCommentButtonPress = () => {
+    specificEvent.commentState[1](!specificEvent.commentState[0]);
   };
 
-  const handleTechFilterClick = () => {
-    setTechFilter(!techFilterEnabled);
+  const handleShareButtonPress = () => {
+    specificEvent.shareState[1](!specificEvent.shareState[0]);
+  }
+
+  const handleRsvpButtonPress = () => {
+    specificEvent.rsvpState[1](!specificEvent.rsvpState[0]);
+  }
+
+  return (
+    <Event
+              eventName={specificEvent.eventName}
+              startTime={specificEvent.eventStartTime} 
+              location={specificEvent.eventLocation}
+              attendees={specificEvent.attendanceCount}
+            >
+              <CommunityBar>
+                <InteractionCounter count={specificEvent.attendanceCount} type='event'/>
+                <ResponseButton 
+                  type='rsvp'
+                  onResponseButtonPress={handleRsvpButtonPress}
+                  active={specificEvent.rsvpState[0]}
+                  />
+                <ResponseButton 
+                  type='comment'
+                  onResponseButtonPress={handleCommentButtonPress}
+                />
+                <ResponseButton 
+                  type='share'
+                  onResponseButtonPress={handleShareButtonPress}
+                />
+              </CommunityBar>
+              <CommentBar
+                active={specificEvent.commentState[0]}
+                />
+              <ShareBar
+                active={specificEvent.shareState[0]}
+              />
+            </Event>
+  );
+});
+
+//Menu Icon
+
+  const [menuIconEnabled, setMenuState] = useState(false);
+
+  const handleMenuClick = () => {
+    setMenuState(!menuIconEnabled);
   };
+
 
   return (
     <div className="App">
       <Header 
         greeting="What's up, Chicago!"
       >
-        <PopUpIcon tag="fas fa-bars"/>
-        <Banner headline="SaladBowl: Fresh News and Events Curated By You - For You"/>
+        <PopUpIcon 
+          tag="fas fa-bars"
+          active={menuIconEnabled}
+          onMenuClick={handleMenuClick}
+        />
+        <Menu
+          active={menuIconEnabled}
+        />
+        <Banner headline="SaladBowl: Fresh News and Events"/>
       </Header>
       <DailyImage/>
       <Body>
         <PageDivider>
           <NewsFeed>
             <FilterBar>
-              <Filter
-                active={healthFilterEnabled}
-                onToggleFilter={handleHealthFilterClick}
-                topic="Health"
-              />
-              <Filter
-                active={techFilterEnabled}
-                onToggleFilter={handleTechFilterClick}
-                topic="Tech"
-              />
-              <Filter
-                topic="Politics"
-              />
-              <Filter
-                topic="International"
-              />
-              <Filter
-                topic="Science"
-              />
-              <Filter
-                topic="Local"
-                active={true}
-              />
+              {filterNewsComponents}
             </FilterBar>
-
-            <NewsStory>
-              <Headline title="Suntan Lotion cures Smallpox" subTitle="Nosun Nemore"/>
-              <MainStory summary="Studies show that suntan lotion applied on the elbow and armpit is able to reverse the..."/>
-              <CommunityBar>
-                <InteractionCounter count={3} type='news'/>
-                <ResponseButton type='comment'/>
-                <ResponseButton type='share'/>
-              </CommunityBar>
-            </NewsStory>
-
-            <NewsStory>
-              <Headline title="Dog Saves Bear from Avalanche" subTitle="Fido Smokey"/>
-              <MainStory summary="Studies show that suntan lotion applied on the elbow and armpit is able to reverse the..."/>
-              <CommunityBar>
-                <InteractionCounter count={0} type='news'/>
-                <ResponseButton type='comment'/>
-                <ResponseButton type='share'/>
-              </CommunityBar>
-            </NewsStory>
-  
-            <NewsStory>
-              <Headline title="Listening to Dua Lipa causes Mumps" subTitle="NuRules Icountem"/>
-              <MainStory summary="Studies show that suntan lotion applied on the elbow and armpit is able to reverse the..."/>
-              <CommunityBar>
-                <InteractionCounter count={1} type='news'/>
-                <ResponseButton type='comment'/>
-                <ResponseButton type='share'/>
-              </CommunityBar>
-            </NewsStory>
-
-            <NewsStory>
-              <Headline title="Mailman Wins Lottery - Shares With Dog" subTitle="Foo Foo"/>
-              <MainStory summary="Studies show that suntan lotion applied on the elbow and armpit is able to reverse the..."/>
-              <CommunityBar>
-                <InteractionCounter count={100} type='news'/>
-                <ResponseButton type='comment'/>
-                <ResponseButton type='share'/>
-              </CommunityBar>
-            </NewsStory>
-
+            {newsStoryComponents}
           </NewsFeed>
         </PageDivider>
 
@@ -132,82 +326,10 @@ function App() {
 
           <EventFeed>
             <FilterBar>
-              <Filter
-                topic="Outdoors"
-                active={true}
-              />
-              <Filter
-                topic="21+"
-              />
-              <Filter
-                topic="Athletic"
-                active={true}
-              />
-              <Filter
-                topic="Hobby"
-                active={true}
-              />
-              <Filter
-                topic="Art"
-              />
-              <Filter
-                topic="Food"
-              />
+              {filterEventsComponents}
             </FilterBar>
             
-            <Event
-              eventName="Picnic in the Park"
-              startTime="3:00PM" 
-              location="Somerville"
-              attendees={20}
-            >
-              <CommunityBar>
-                <InteractionCounter count={20} type='event'/>
-                <ResponseButton type='rsvp'/>
-                <ResponseButton type='comment'/>
-                <ResponseButton type='share'/>
-              </CommunityBar>
-            </Event>
-
-            <Event
-              eventName="Hot Wings Challenge"
-              startTime="6:00PM" 
-              location="Boston Commons"
-            >
-              <CommunityBar>
-                <InteractionCounter count={9} type='event'/>
-                <ResponseButton type='rsvp'/>
-                <ResponseButton type='comment'/>
-                <ResponseButton type='share'/>
-              </CommunityBar>
-            </Event>
-              
-
-            <Event
-              eventName="Poetry Slam"
-              startTime="10:00PM" 
-              location="Howl at the Moon"
-            >
-              <CommunityBar>
-                <InteractionCounter count={0} type='event'/>
-                <ResponseButton type='rsvp'/>
-                <ResponseButton type='comment'/>
-                <ResponseButton type='share'/>
-              </CommunityBar>
-            </Event>
-
-            <Event
-              eventName="Carpool Karaoke"
-              startTime="11:00AM" 
-              location="Massachusetts Avenue"
-            >
-              <CommunityBar>
-                <InteractionCounter count={1} type='event'/>
-                <ResponseButton type='rsvp'/>
-                <ResponseButton type='comment'/>
-                <ResponseButton type='share'/>
-              </CommunityBar>
-            </Event>
+            {eventComponents}
           </EventFeed>
         </PageDivider>
       </Body>

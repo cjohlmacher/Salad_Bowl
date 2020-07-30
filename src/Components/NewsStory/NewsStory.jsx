@@ -9,7 +9,7 @@ const NewsStory = (props) => {
   
     return (
       <div style={styles.container}>
-        <div class="body">
+        <div style={styles.body} class="body">
           {children}
         </div>
       </div>

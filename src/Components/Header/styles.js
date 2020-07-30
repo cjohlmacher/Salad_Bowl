@@ -9,6 +9,7 @@ const styles = {
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'flex-start',
+  position: 'fixed',
 
 };
 
