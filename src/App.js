@@ -15,9 +15,7 @@ import FilterBar from './Components/FilterBar';
 import Filter from './Components/Filter';
 import Event from './Components/Event';
 import PageDivider from './Components/PageDivider';
-import Headline from './Components/Headline';
 import ResponseButton from './Components/ResponseButton';
-import MainStory from './Components/MainStory';
 import InteractionCounter from './Components/InteractionCounter';
 import CommunityBar from './Components/CommunityBar';
 import CommentBar from './Components/CommentBar/CommentBar';
@@ -25,257 +23,238 @@ import ShareBar from './Components/ShareBar';
 import Menu from './Components/Menu';
 
 function App() {
-  
+
 
   //News Filter Creation
-  const newsFilterList = [
-    {
-      name: "Health",
-      state: useState(false),
-    },
-    {
-      name: "Tech",
-      state: useState(false),
-    },
-    {
-      name: "Politics",
-      state: useState(false),
-    },
-    {
-      name: "International",
-      state: useState(false),
-    },
-    {
-      name: "Local",
-      state: useState(false),
-    },
-    {
-      name: "Science",
-      state: useState(false),
+
+  const initialNewsFilters = {
+    "Health": false,
+    "Tech": false,
+    "Politics": false,
+    "International": false,
+    "Local": false,
+    "Science": false,
+  };
+
+  const [newsFilterState, setNewsFilterState] = useState(initialNewsFilters);
+
+  const changeFilter = (filterName, newFilterValue) => {
+
+    const modifiedFilterState = {
+      ...newsFilterState,
+      [filterName]: newFilterValue,
     }
-  ];
+    setNewsFilterState(modifiedFilterState)
+  }
 
+  const filterNewsComponents = Object.keys(initialNewsFilters).map(function (filterName) {
+    const currentFilterValue = newsFilterState[filterName];
 
-  const filterNewsComponents = newsFilterList.map(function (filter) {
-        
     const handleFilterClick = () => {
-      filter.state[1](!filter.state[0])
+      changeFilter(filterName, !currentFilterValue)
     }
 
     return (
       <Filter
-        active={filter.state[0]}
+        active={currentFilterValue}
         onToggleFilter={handleFilterClick}
-        topic={filter.name}
+        topic={filterName}
       />
     );
   });
 
   //Events Filter Creation
-  const eventsFilterList = [
-    {
-      name: "Outdoors",
-      state: useState(false),
-    },
-    {
-      name: "21+",
-      state: useState(false),
-    },
-    {
-      name: "Athletic",
-      state: useState(false),
-    },
-    {
-      name: "Hobby",
-      state: useState(false),
-    },
-    {
-      name: "Art",
-      state: useState(false),
-    },
-    {
-      name: "Food",
-      state: useState(false),
+
+  const initialEventFilters = {
+    "Outdoors": false,
+    "21+": false,
+    "Athletic": false,
+    "Hobby": false,
+    "Art": false,
+    "Food": false,
+  }
+
+  const [eventFilterState, setEventFilterState] = useState(initialEventFilters)
+
+  const changeEventFilterState = (filterName, newFilterValue) => {
+
+    const modifiedFilterState = {
+      ...eventFilterState,
+      [filterName]: newFilterValue,
     }
-  ];
+    setEventFilterState(modifiedFilterState)
+  }
+
+  const filterEventsComponents = Object.keys(initialEventFilters).map(function (eventCategory) {
+
+    const currentFilterValue = eventFilterState[eventCategory]
 
 
-  const filterEventsComponents = eventsFilterList.map(function (filter) {
-        
     const handleFilterClick = () => {
-      filter.state[1](!filter.state[0])
+      changeEventFilterState(eventCategory, !currentFilterValue)
     }
 
     return (
       <Filter
-        active={filter.state[0]}
+        active={eventFilterState[eventCategory]}
         onToggleFilter={handleFilterClick}
-        topic={filter.name}
+        topic={eventCategory}
       />
     );
   });
 
-  //CommentBar
+  //CommentBar - News
+  const [commentingNewsStoryId, setCommentingNewsStoryId] = useState(null);
+
+  //ShareBar - News
+  const [sharingNewsStoryId, setSharingNewsStoryId] = useState(null);
+
+  //CommentBar - Events
+  const [commentingEventId, setCommentingEventId] = useState(null);
+
+  //ShareBar - Events
+  const [sharingEventId, setSharingEventId] = useState(null);
 
   const newsStoryList = [
     {
+      id: 1,
       headlineTitle: "Suntan Lotion cures Smallpox",
       headlineSubtitle: "Nosun Nemore",
       mainStorySummary: "Studies show that suntan lotion applied on the elbow and armpit is able to reverse the...",
       interactionCount: 3,
-      commentState: useState(false),
-      shareState: useState(false),
     },
     {
+      id: 2,
       headlineTitle: "Dog Saves Bear from Avalanche",
       headlineSubtitle: "Fido Smokey",
       mainStorySummary: "An inspiring story coming out of Lake Tahoe this weekend. A bear nearly swallowed by an...",
       interactionCount: 0,
-      commentState: useState(false),
-      shareState: useState(false),
     },
     {
+      id: 3,
       headlineTitle: "Listening to Dua Lipa causes Mumps",
       headlineSubtitle: "NuRules Icountem",
       mainStorySummary: "Studies show that suntan lotion applied on the elbow and armpit is able to reverse the...",
       interactionCount: 1,
-      commentState: useState(false),
-      shareState: useState(false),
     },
     {
+      id: 4,
       headlineTitle: "Mailman Wins Lottery - Shares With Dog",
       headlineSubtitle: "Foo Foo",
       mainStorySummary: "A local mailman had the winning ticket in Tuesday's lotto taking in over 64 million...",
       interactionCount: 100,
-      commentState: useState(false),
-      shareState: useState(false),
     },
-  ];  
+  ];
 
   const newsStoryComponents = newsStoryList.map(function (story) {
-        
+
     const handleCommentButtonPress = () => {
-      story.commentState[1](!story.commentState[0]);
+      if (commentingNewsStoryId === story.id) {
+        setCommentingNewsStoryId(null);
+      } else {
+        setCommentingNewsStoryId(story.id);
+      }
     };
 
     const handleShareButtonPress = () => {
-      story.shareState[1](!story.shareState[0]);
+      if (sharingNewsStoryId === story.id) {
+        setSharingNewsStoryId(null);
+      } else {
+        setSharingNewsStoryId(story.id);
+      }
     }
 
     return (
-      <NewsStory>
-              <Headline title={story.headlineTitle} subTitle={story.headlineSubtitle}/>
-              <MainStory summary={story.mainStorySummary}/>
-              <CommunityBar>
-                <InteractionCounter count={story.interactionCount} type='news'/>
-                <ResponseButton 
-                  type='comment'
-                  onResponseButtonPress={handleCommentButtonPress}
-                />
-                <ResponseButton 
-                  type='share'
-                  onResponseButtonPress={handleShareButtonPress}
-                />
-              </CommunityBar>
-              <CommentBar
-                active={story.commentState[0]}
-              />
-              <ShareBar
-                active={story.shareState[0]}
-              />
-            </NewsStory>
+      <NewsStory
+        headlineTitle={story.headlineTitle}
+        headlineSubtitle={story.headlineSubtitle}
+        mainStorySummary={story.mainStorySummary}
+        interactionCount={story.interactionCount}
+        commentBarActive={story.id === commentingNewsStoryId}
+        shareBarActive={story.id === sharingNewsStoryId}
+        handleCommentButtonPress={handleCommentButtonPress}
+        handleShareButtonPress={handleShareButtonPress}
+      />
     );
   });
 
-//Events
+  //Events
 
-const eventsList = [
-  {
-    eventName: "Picnic in the Park ",
-    eventStartTime: "3:00PM",
-    eventLocation: "Somerville",
-    attendanceCount: 20,
-    rsvpState: useState(false),
-    commentState: useState(false),
-    shareState: useState(false),
-  },
-  {
-    eventName: "Hot Wings Challenge",
-    eventStartTime: "6:00PM",
-    eventLocation: "Boston Commons",
-    attendanceCount: 9,
-    rsvpState: useState(false),
-    commentState: useState(false),
-    shareState: useState(false),
-  },
-  {
-    eventName: "Poetry Slam",
-    eventStartTime: "10:00PM",
-    eventLocation: "Howl at the Moon",
-    attendanceCount: 0,
-    rsvpState: useState(false),
-    commentState: useState(false),
-    shareState: useState(false),
-  },
-  {
-    eventName: "Carpool Karaoke",
-    eventStartTime: "11:00AM",
-    eventLocation: "Massachusetts Avenue",
-    attendanceCount: 1,
-    rsvpState: useState(false),
-    commentState: useState(false),
-    shareState: useState(false),
-  },
-];  
+  const eventsList = [
+    {
+      id: 1,
+      eventName: "Picnic in the Park ",
+      eventStartTime: "3:00PM",
+      eventLocation: "Somerville",
+      attendanceCount: 20,
+      rsvpState: useState(false),
+    },
+    {
+      id: 2,
+      eventName: "Hot Wings Challenge",
+      eventStartTime: "6:00PM",
+      eventLocation: "Boston Commons",
+      attendanceCount: 9,
+      rsvpState: useState(false),
+    },
+    {
+      id: 3,
+      eventName: "Poetry Slam",
+      eventStartTime: "10:00PM",
+      eventLocation: "Howl at the Moon",
+      attendanceCount: 0,
+      rsvpState: useState(false),
+    },
+    {
+      id: 4,
+      eventName: "Carpool Karaoke",
+      eventStartTime: "11:00AM",
+      eventLocation: "Massachusetts Avenue",
+      attendanceCount: 1,
+      rsvpState: useState(false),
+    },
+  ];
 
-const eventComponents = eventsList.map(function (specificEvent) {
-      
-  const handleCommentButtonPress = () => {
-    specificEvent.commentState[1](!specificEvent.commentState[0]);
-  };
+  const eventComponents = eventsList.map(function (specificEvent) {
 
-  const handleShareButtonPress = () => {
-    specificEvent.shareState[1](!specificEvent.shareState[0]);
-  }
+    const handleCommentButtonPress = () => {
+      if (commentingEventId === specificEvent.id) {
+        setCommentingEventId(null);
+      } else {
+        setCommentingEventId(specificEvent.id);
+      }
+    };
 
-  const handleRsvpButtonPress = () => {
-    specificEvent.rsvpState[1](!specificEvent.rsvpState[0]);
-  }
+    const handleShareButtonPress = () => {
+      if (sharingEventId === specificEvent.id) {
+        setSharingEventId(null);
+      } else {
+        setSharingEventId(specificEvent.id);
+      }
+    }
 
-  return (
-    <Event
-              eventName={specificEvent.eventName}
-              startTime={specificEvent.eventStartTime} 
-              location={specificEvent.eventLocation}
-              attendees={specificEvent.attendanceCount}
-            >
-              <CommunityBar>
-                <InteractionCounter count={specificEvent.attendanceCount} type='event'/>
-                <ResponseButton 
-                  type='rsvp'
-                  onResponseButtonPress={handleRsvpButtonPress}
-                  active={specificEvent.rsvpState[0]}
-                  />
-                <ResponseButton 
-                  type='comment'
-                  onResponseButtonPress={handleCommentButtonPress}
-                />
-                <ResponseButton 
-                  type='share'
-                  onResponseButtonPress={handleShareButtonPress}
-                />
-              </CommunityBar>
-              <CommentBar
-                active={specificEvent.commentState[0]}
-                />
-              <ShareBar
-                active={specificEvent.shareState[0]}
-              />
-            </Event>
-  );
-});
+    const handleRsvpButtonPress = () => {
+      specificEvent.rsvpState[1](!specificEvent.rsvpState[0]);
+    }
 
-//Menu Icon
+    return (
+      <Event
+        eventName={specificEvent.eventName}
+        startTime={specificEvent.eventStartTime}
+        location={specificEvent.eventLocation}
+        attendees={specificEvent.attendanceCount}
+        commentBarActive={specificEvent.id === commentingEventId}
+        shareBarActive={specificEvent.id === sharingEventId}
+        handleCommentButtonPress={handleCommentButtonPress}
+        handleShareButtonPress={handleShareButtonPress}
+        handleRsvpButtonPress={handleRsvpButtonPress}
+        rsvpState={specificEvent.rsvpState}
+      >
+      </Event>
+    );
+  });
+
+  //Menu Icon
 
   const [menuIconEnabled, setMenuState] = useState(false);
 
@@ -286,10 +265,10 @@ const eventComponents = eventsList.map(function (specificEvent) {
 
   return (
     <div className="App">
-      <Header 
+      <Header
         greeting="What's up, Chicago!"
       >
-        <PopUpIcon 
+        <PopUpIcon
           tag="fas fa-bars"
           active={menuIconEnabled}
           onMenuClick={handleMenuClick}
@@ -297,9 +276,9 @@ const eventComponents = eventsList.map(function (specificEvent) {
         <Menu
           active={menuIconEnabled}
         />
-        <Banner headline="SaladBowl: Fresh News and Events"/>
+        <Banner headline="SaladBowl: Fresh News and Events" />
       </Header>
-      <DailyImage/>
+      <DailyImage />
       <Body>
         <PageDivider>
           <NewsFeed>
@@ -312,7 +291,7 @@ const eventComponents = eventsList.map(function (specificEvent) {
 
         <PageDivider>
           <Weather>
-            <CurrentWeather 
+            <CurrentWeather
               weather='snow'
               temp='29 F'
               humidity='50'
@@ -328,7 +307,7 @@ const eventComponents = eventsList.map(function (specificEvent) {
             <FilterBar>
               {filterEventsComponents}
             </FilterBar>
-            
+
             {eventComponents}
           </EventFeed>
         </PageDivider>
@@ -341,7 +320,7 @@ const eventComponents = eventsList.map(function (specificEvent) {
 
 function DailyImage() {
   return (
-    <img className="inspoPic" src="https://dogtime.com/assets/uploads/2018/10/puppies-cover-1280x720.jpg"/>
+    <img className="inspoPic" src="https://dogtime.com/assets/uploads/2018/10/puppies-cover-1280x720.jpg" />
   )
 }
 

@@ -10,7 +10,7 @@ const styles = {
   flexDirection: 'row',
   justifyContent: 'flex-start',
   position: 'fixed',
-
+  zIndex: '999',
 };
 
 export default styles;
