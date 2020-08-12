@@ -187,7 +187,6 @@ function App() {
       eventStartTime: "3:00PM",
       eventLocation: "Somerville",
       attendanceCount: 20,
-      rsvpState: useState(false),
     },
     {
       id: 2,
@@ -195,7 +194,6 @@ function App() {
       eventStartTime: "6:00PM",
       eventLocation: "Boston Commons",
       attendanceCount: 9,
-      rsvpState: useState(false),
     },
     {
       id: 3,
@@ -203,7 +201,6 @@ function App() {
       eventStartTime: "10:00PM",
       eventLocation: "Howl at the Moon",
       attendanceCount: 0,
-      rsvpState: useState(false),
     },
     {
       id: 4,
@@ -211,7 +208,6 @@ function App() {
       eventStartTime: "11:00AM",
       eventLocation: "Massachusetts Avenue",
       attendanceCount: 1,
-      rsvpState: useState(false),
     },
   ];
 
@@ -233,10 +229,6 @@ function App() {
       }
     }
 
-    const handleRsvpButtonPress = () => {
-      specificEvent.rsvpState[1](!specificEvent.rsvpState[0]);
-    }
-
     return (
       <Event
         eventName={specificEvent.eventName}
@@ -247,8 +239,6 @@ function App() {
         shareBarActive={specificEvent.id === sharingEventId}
         handleCommentButtonPress={handleCommentButtonPress}
         handleShareButtonPress={handleShareButtonPress}
-        handleRsvpButtonPress={handleRsvpButtonPress}
-        rsvpState={specificEvent.rsvpState}
       >
       </Event>
     );

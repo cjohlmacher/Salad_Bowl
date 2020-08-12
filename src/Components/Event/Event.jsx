@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import styles from './styles'
 import CommunityBar from '../CommunityBar'
 import ResponseButton from '../ResponseButton'
@@ -17,15 +17,18 @@ const Event = (props) => {
     attendees,
     commentBarActive,
     shareBarActive,
-    handleRsvpButtonPress,
     handleCommentButtonPress,
     handleShareButtonPress,
-    rsvpState,
   } = props;
 
 
   const timeText = `Start time: ${startTime}`
 
+  const [rsvpActive, setRsvpActive] = useState(false);
+
+  const handleRsvpButtonPress = () => {
+    setRsvpActive(!rsvpActive);
+  }
 
   return (
     <div style={styles}>
@@ -38,7 +41,7 @@ const Event = (props) => {
         <ResponseButton
           type='rsvp'
           onResponseButtonPress={handleRsvpButtonPress}
-          active={rsvpState[0]}
+          active={rsvpActive}
         />
         <ResponseButton
           type='comment'
