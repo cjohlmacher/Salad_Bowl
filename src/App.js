@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 import NewsStory from './Components/NewsStory'
@@ -252,6 +252,20 @@ function App() {
     setMenuState(!menuIconEnabled);
   };
 
+  const [weatherData, setWeatherData] = useState({});
+
+  useEffect(() => {
+    const url = 'http://api.openweathermap.org/data/2.5/weather?q=somerville,ma,us&APPID=92e0b50f2fc7c97a2b62b739f73a4605&units=imperial';
+
+    fetch(url)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        setWeatherData(data);
+      });
+  }, []);
 
   return (
     <div className="App">
@@ -285,7 +299,7 @@ function App() {
               weather='snow'
               temp='29 F'
               humidity='50'
-              windSpeed='7'
+              windSpeed={weatherData?.wind?.speed}
             />
             <Forecast
               forecastWeather='sunny'
