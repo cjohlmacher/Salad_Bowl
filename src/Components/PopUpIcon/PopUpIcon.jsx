@@ -8,10 +8,24 @@ const PopUpIcon = (props) => {
 
   const {
     tag,
+    active,
+    onMenuClick,
   } = props;
 
+  const handleClick = () => {
+    onMenuClick();
+  }
+
+  let activeStyle;
+
+  if (active === true) {
+    activeStyle = styles.active;
+  } else {
+    activeStyle = styles.inactive;
+  }
+
   return (
-   <FontAwesomeIcon icon={faBars} style={styles} size="5x"/>
+   <FontAwesomeIcon icon={faBars} style={activeStyle} size="5x" onClick={handleClick}/>
   )  
 }
 

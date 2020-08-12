@@ -15,6 +15,10 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
     },
+    body: {
+        display: 'flex',
+        flexDirection: 'column',
+    }
 };
 
 export default styles;
