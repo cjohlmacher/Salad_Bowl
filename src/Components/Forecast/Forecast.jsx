@@ -11,27 +11,25 @@ const Forecast = (props) => {
   const {
     forecastWeather,
     forecastTemp,
+    forecastIcon,
+    forecastTimeOfDay,
   } = props;
 
-  let icon = faCloud;
+  let imgUrl = `http://openweathermap.org/img/wn/${forecastIcon}@2x.png`;
 
-  if (forecastWeather === 'cloudy') {
-    icon = faCloud;
+  let forecastHeader;
+  if (forecastTimeOfDay === 'evening') {
+    forecastHeader = "Tonight:"
+  } else if (forecastTimeOfDay === 'day') {
+    forecastHeader = "Tomorrow:"
+  } else {
+    forecastHeader = "Upcoming:"
   }
-  else if (forecastWeather === 'sunny') {
-    icon = faCloudSun;
-  }
-  else if (forecastWeather === 'rain') {
-    icon = faCloudShowersHeavy;
-  }
-  else if (forecastWeather === 'snow') {
-    icon = faSnowflake;
-  };
 
   return (
     <div style={styles.container}>
-      <h2>Upcoming:</h2>
-      <FontAwesomeIcon icon={icon} size='2x' style={styles.weatherIcon}/>
+      <h2>{forecastHeader}</h2>
+      <img src={imgUrl} />
       <h1 style={styles.forecastTemp}>{forecastTemp}</h1>
     </div>
   );

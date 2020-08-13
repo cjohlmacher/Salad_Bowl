@@ -252,20 +252,6 @@ function App() {
     setMenuState(!menuIconEnabled);
   };
 
-  const [weatherData, setWeatherData] = useState({});
-
-  useEffect(() => {
-    const url = 'http://api.openweathermap.org/data/2.5/weather?q=somerville,ma,us&APPID=92e0b50f2fc7c97a2b62b739f73a4605&units=imperial';
-
-    fetch(url)
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        console.log(data);
-        setWeatherData(data);
-      });
-  }, []);
 
   return (
     <div className="App">
@@ -294,18 +280,7 @@ function App() {
         </PageDivider>
 
         <PageDivider>
-          <Weather>
-            <CurrentWeather
-              weather='snow'
-              temp='29 F'
-              humidity='50'
-              windSpeed={weatherData?.wind?.speed}
-            />
-            <Forecast
-              forecastWeather='sunny'
-              forecastTemp='73 F'
-            />
-          </Weather>
+          <Weather />
 
           <EventFeed>
             <FilterBar>

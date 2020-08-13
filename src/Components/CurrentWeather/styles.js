@@ -3,7 +3,7 @@ const styles = {
     color: 'darkblue',
   },
   temperature: {
-    margin: '0px 15px',
+    margin: '0px 15px 0px 0px',
   },
   container: {
     display: 'flex',
