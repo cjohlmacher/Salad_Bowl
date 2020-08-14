@@ -1,11 +1,14 @@
 import React from 'react'
 import styles from './styles'
 
+//Alternate icons:
+/*
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloud } from '@fortawesome/free-solid-svg-icons';
 import { faCloudSun } from '@fortawesome/free-solid-svg-icons';
 import { faCloudShowersHeavy } from '@fortawesome/free-solid-svg-icons';
 import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
+*/
 
 const CurrentWeather = (props) => {
   const {

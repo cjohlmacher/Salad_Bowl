@@ -74,8 +74,6 @@ const Weather = (props) => {
     forecast = findForecast(weatherData, curfew);
   }
 
-
-
   return (
     <div style={styles}>
       <CurrentWeather

@@ -63,45 +63,7 @@ function App() {
     );
   });
 
-  //Events Filter Creation
 
-  const initialEventFilters = {
-    "Outdoors": false,
-    "21+": false,
-    "Athletic": false,
-    "Hobby": false,
-    "Art": false,
-    "Food": false,
-  }
-
-  const [eventFilterState, setEventFilterState] = useState(initialEventFilters)
-
-  const changeEventFilterState = (filterName, newFilterValue) => {
-
-    const modifiedFilterState = {
-      ...eventFilterState,
-      [filterName]: newFilterValue,
-    }
-    setEventFilterState(modifiedFilterState)
-  }
-
-  const filterEventsComponents = Object.keys(initialEventFilters).map(function (eventCategory) {
-
-    const currentFilterValue = eventFilterState[eventCategory]
-
-
-    const handleFilterClick = () => {
-      changeEventFilterState(eventCategory, !currentFilterValue)
-    }
-
-    return (
-      <Filter
-        active={eventFilterState[eventCategory]}
-        onToggleFilter={handleFilterClick}
-        topic={eventCategory}
-      />
-    );
-  });
 
   //CommentBar - News
   const [commentingNewsStoryId, setCommentingNewsStoryId] = useState(null);
@@ -178,72 +140,6 @@ function App() {
     );
   });
 
-  //Events
-
-  const eventsList = [
-    {
-      id: 1,
-      eventName: "Picnic in the Park ",
-      eventStartTime: "3:00PM",
-      eventLocation: "Somerville",
-      attendanceCount: 20,
-    },
-    {
-      id: 2,
-      eventName: "Hot Wings Challenge",
-      eventStartTime: "6:00PM",
-      eventLocation: "Boston Commons",
-      attendanceCount: 9,
-    },
-    {
-      id: 3,
-      eventName: "Poetry Slam",
-      eventStartTime: "10:00PM",
-      eventLocation: "Howl at the Moon",
-      attendanceCount: 0,
-    },
-    {
-      id: 4,
-      eventName: "Carpool Karaoke",
-      eventStartTime: "11:00AM",
-      eventLocation: "Massachusetts Avenue",
-      attendanceCount: 1,
-    },
-  ];
-
-  const eventComponents = eventsList.map(function (specificEvent) {
-
-    const handleCommentButtonPress = () => {
-      if (commentingEventId === specificEvent.id) {
-        setCommentingEventId(null);
-      } else {
-        setCommentingEventId(specificEvent.id);
-      }
-    };
-
-    const handleShareButtonPress = () => {
-      if (sharingEventId === specificEvent.id) {
-        setSharingEventId(null);
-      } else {
-        setSharingEventId(specificEvent.id);
-      }
-    }
-
-    return (
-      <Event
-        eventName={specificEvent.eventName}
-        startTime={specificEvent.eventStartTime}
-        location={specificEvent.eventLocation}
-        attendees={specificEvent.attendanceCount}
-        commentBarActive={specificEvent.id === commentingEventId}
-        shareBarActive={specificEvent.id === sharingEventId}
-        handleCommentButtonPress={handleCommentButtonPress}
-        handleShareButtonPress={handleShareButtonPress}
-      >
-      </Event>
-    );
-  });
-
   //Menu Icon
 
   const [menuIconEnabled, setMenuState] = useState(false);
@@ -283,11 +179,6 @@ function App() {
           <Weather />
 
           <EventFeed>
-            <FilterBar>
-              {filterEventsComponents}
-            </FilterBar>
-
-            {eventComponents}
           </EventFeed>
         </PageDivider>
       </Body>
