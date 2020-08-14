@@ -11,6 +11,7 @@ const styles = {
   flexDirection: 'row',
   flexWrap: 'wrap',
   overflow: 'auto',
+  backgroundColor: 'lightblue',
 };
 
 export default styles;
