@@ -72,57 +72,10 @@ const EventFeed = (props) => {
       });
   }, []);
 
-  let eventsList = [];
+  let eventComponents = [];
 
-  if (Object.keys(eventsData).length === 0) {
-  } else {
-    eventsList = eventsData.events.map(function (specificEvent) {
-      return {
-        id: specificEvent.id,
-        eventName: specificEvent.title,
-        eventStartTime: specificEvent.datetime_local,
-        eventLocation: specificEvent.venue.display_location,
-        attendanceCount: 1
-      }
-    })
-  }
-
-  let eventComponents = {};
-
-  if (Object.keys(eventsList) === 0) {
-    eventsList = [
-      {
-        id: 1,
-        eventName: "Picnic in the Park ",
-        eventStartTime: "3:00PM",
-        eventLocation: "Somerville",
-        attendanceCount: 20,
-      },
-      {
-        id: 2,
-        eventName: "Hot Wings Challenge",
-        eventStartTime: "6:00PM",
-        eventLocation: "Boston Commons",
-        attendanceCount: 9,
-      },
-      {
-        id: 3,
-        eventName: "Poetry Slam",
-        eventStartTime: "10:00PM",
-        eventLocation: "Howl at the Moon",
-        attendanceCount: 0,
-      },
-      {
-        id: 4,
-        eventName: "Carpool Karaoke",
-        eventStartTime: "11:00AM",
-        eventLocation: "Massachusetts Avenue",
-        attendanceCount: 1,
-      },
-    ];
-  } else {
-    eventComponents = eventsList.map(function (specificEvent) {
-
+  if (Object.keys(eventsData).length > 0) {
+    eventComponents = eventsData.events.map(function (specificEvent) {
       const handleCommentButtonPress = () => {
         if (commentingEventId === specificEvent.id) {
           setCommentingEventId(null);
@@ -141,22 +94,19 @@ const EventFeed = (props) => {
 
       return (
         <Event
-          eventName={specificEvent.eventName}
-          startTime={specificEvent.eventStartTime}
-          location={specificEvent.eventLocation}
-          attendees={specificEvent.attendanceCount}
+          key={specificEvent.id}
+          eventName={specificEvent.title}
+          startTime={specificEvent.datetime_local}
+          location={specificEvent.venue.display_location}
+          attendees={0}
           commentBarActive={specificEvent.id === commentingEventId}
           shareBarActive={specificEvent.id === sharingEventId}
           handleCommentButtonPress={handleCommentButtonPress}
           handleShareButtonPress={handleShareButtonPress}
-        >
-        </Event>
-      );
-    });
+        />
+      )
+    })
   }
-
-
-
 
   return (
     <div style={styles}>
@@ -164,7 +114,6 @@ const EventFeed = (props) => {
       <FilterBar>
         {filterEventsComponents}
       </FilterBar>
-
       {eventComponents}
     </div>
   );
