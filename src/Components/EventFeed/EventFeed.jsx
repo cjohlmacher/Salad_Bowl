@@ -3,6 +3,7 @@ import styles from './styles'
 import Filter from '../Filter'
 import FilterBar from '../FilterBar'
 import Event from '../Event'
+import config from '../../config.js'
 
 const EventFeed = (props) => {
   const {
@@ -58,9 +59,9 @@ const EventFeed = (props) => {
   const [sharingEventId, setSharingEventId] = useState(null);
 
   const [eventsData, setEventsData] = useState({});
-
+  console.log(process.env);
   useEffect(() => {
-    const url = ""
+    const url = `https://api.seatgeek.com/2/events?geoip=true&client_id=${config.SEAT_GEEK_CLIENT_ID}`;
 
     fetch(url)
       .then(response => {
@@ -75,7 +76,7 @@ const EventFeed = (props) => {
   let eventComponents = [];
 
   if (Object.keys(eventsData).length > 0) {
-    eventComponents = eventsData.events.map(function (specificEvent) {
+    eventComponents = eventsData?.events?.map(function (specificEvent) {
       const handleCommentButtonPress = () => {
         if (commentingEventId === specificEvent.id) {
           setCommentingEventId(null);
