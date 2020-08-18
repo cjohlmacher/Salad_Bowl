@@ -1,8 +1,7 @@
 import React from 'react';
 import styles from './styles';
-import Banner from '../Banner';
 
-const Header = (props) => {
+const PhotoBar = (props) => {
   const {
     children,
   } = props;
@@ -10,9 +9,8 @@ const Header = (props) => {
   return (
     <header style={styles}>
       {children}
-      <Banner headline="SaladBowl: Fresh News and Events" />
     </header>
   )
 }
 
-export default Header;
+export default PhotoBar;

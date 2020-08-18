@@ -1,7 +1,5 @@
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 
-
-
 const styles = {
   active: {
     display: 'flex',

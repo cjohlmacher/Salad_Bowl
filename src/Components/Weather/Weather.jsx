@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styles from './styles'
 import CurrentWeather from '../CurrentWeather'
 import Forecast from '../Forecast'
+import config from '../../config.js'
 
 const Weather = (props) => {
   const {
@@ -11,7 +12,7 @@ const Weather = (props) => {
   const [weatherData, setWeatherData] = useState({});
 
   useEffect(() => {
-    const url = 'https://api.openweathermap.org/data/2.5/onecall?lat=37.804371&lon=-122.270798&units=imperial&exclude=minutely,hourly&appid=92e0b50f2fc7c97a2b62b739f73a4605'
+    const url = `https://api.openweathermap.org/data/2.5/onecall?lat=37.804371&lon=-122.270798&units=imperial&exclude=minutely,hourly&appid=${config.OPEN_WEATHER_MAP_CLIENT_ID}`
 
     fetch(url)
       .then(response => {
@@ -65,7 +66,6 @@ const Weather = (props) => {
       }
     }
   };
-
 
   if (Object.keys(weatherData).length === 0) {
   } else {

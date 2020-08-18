@@ -13,29 +13,39 @@ const EventFeed = (props) => {
   //Events Filter Creation
 
   const initialEventFilters = {
-    "Outdoors": false,
-    "21+": false,
-    "Athletic": false,
-    "Hobby": false,
-    "Art": false,
-    "Food": false,
+    "Sports": true,
+    "F1 Racing": true,
+    "Concert": true,
+    "Literary": true,
+    "Family Entertainment": true,
+    "Theater": true,
+    "Film": true,
   }
 
   const [eventFilterState, setEventFilterState] = useState(initialEventFilters)
 
-  const changeEventFilterState = (filterName, newFilterValue) => {
+  /*
+  //Saving this code for a later expanded filter functionality
+  const [eventFilterData, setEventFilterData] = useState({})
 
-    const modifiedFilterState = {
-      ...eventFilterState,
-      [filterName]: newFilterValue,
-    }
-    setEventFilterState(modifiedFilterState)
-  }
+  useEffect(() => {
+    const url = `https://api.seatgeek.com/2/taxonomies?&client_id=${config.SEAT_GEEK_CLIENT_ID}`;
 
-  const filterEventsComponents = Object.keys(initialEventFilters).map(function (eventCategory) {
+    fetch(url)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        setEventFilterData(data);
+      });
+  }, []);
+  */
+
+  let filterEventsComponents = []
+  filterEventsComponents = Object.keys(initialEventFilters).map(function (eventCategory) {
 
     const currentFilterValue = eventFilterState[eventCategory]
-
 
     const handleFilterClick = () => {
       changeEventFilterState(eventCategory, !currentFilterValue)
@@ -48,10 +58,18 @@ const EventFeed = (props) => {
         topic={eventCategory}
       />
     );
-  });
+  })
+
+  const changeEventFilterState = (filterName, newFilterValue) => {
+
+    const modifiedFilterState = {
+      ...eventFilterState,
+      [filterName]: newFilterValue,
+    }
+    setEventFilterState(modifiedFilterState)
+  }
 
   //Events
-
   //CommentBar - Events
   const [commentingEventId, setCommentingEventId] = useState(null);
 
@@ -59,7 +77,7 @@ const EventFeed = (props) => {
   const [sharingEventId, setSharingEventId] = useState(null);
 
   const [eventsData, setEventsData] = useState({});
-  console.log(process.env);
+
   useEffect(() => {
     const url = `https://api.seatgeek.com/2/events?geoip=true&client_id=${config.SEAT_GEEK_CLIENT_ID}`;
 
@@ -77,35 +95,52 @@ const EventFeed = (props) => {
 
   if (Object.keys(eventsData).length > 0) {
     eventComponents = eventsData?.events?.map(function (specificEvent) {
-      const handleCommentButtonPress = () => {
-        if (commentingEventId === specificEvent.id) {
-          setCommentingEventId(null);
-        } else {
-          setCommentingEventId(specificEvent.id);
-        }
-      };
+      let desiredCategory = false;
 
-      const handleShareButtonPress = () => {
-        if (sharingEventId === specificEvent.id) {
-          setSharingEventId(null);
-        } else {
-          setSharingEventId(specificEvent.id);
+      for (var i = 0; i < specificEvent?.taxonomies?.length; i++) {
+        let taxonomy = specificEvent?.taxonomies[i].name;
+        taxonomy = taxonomy.charAt(0).toUpperCase() + taxonomy.slice(1);
+        if (taxonomy in eventFilterState) {
+          if (eventFilterState[taxonomy] == true) {
+            desiredCategory = true;
+          }
         }
       }
 
-      return (
-        <Event
-          key={specificEvent.id}
-          eventName={specificEvent.title}
-          startTime={specificEvent.datetime_local}
-          location={specificEvent.venue.display_location}
-          attendees={0}
-          commentBarActive={specificEvent.id === commentingEventId}
-          shareBarActive={specificEvent.id === sharingEventId}
-          handleCommentButtonPress={handleCommentButtonPress}
-          handleShareButtonPress={handleShareButtonPress}
-        />
-      )
+      if (desiredCategory == true) {
+        const handleCommentButtonPress = () => {
+          if (commentingEventId === specificEvent.id) {
+            setCommentingEventId(null);
+          } else {
+            setCommentingEventId(specificEvent.id);
+          }
+        };
+
+        const handleShareButtonPress = () => {
+          if (sharingEventId === specificEvent.id) {
+            setSharingEventId(null);
+          } else {
+            setSharingEventId(specificEvent.id);
+          }
+        }
+
+        const formattedTime = specificEvent.datetime_local.slice(11, 16);
+
+        return (
+          <Event
+            key={specificEvent.id}
+            eventName={specificEvent.title}
+            startTime={formattedTime}
+            location={specificEvent.venue.display_location}
+            attendees={0}
+            commentBarActive={specificEvent.id === commentingEventId}
+            shareBarActive={specificEvent.id === sharingEventId}
+            handleCommentButtonPress={handleCommentButtonPress}
+            handleShareButtonPress={handleShareButtonPress}
+          />
+        )
+      }
+
     })
   }
 

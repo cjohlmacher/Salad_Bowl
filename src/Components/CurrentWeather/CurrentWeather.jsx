@@ -19,7 +19,7 @@ const CurrentWeather = (props) => {
     icon,
   } = props
 
-  let imgUrl = `http://openweathermap.org/img/wn/${icon}@2x.png`
+  let imgUrl = (icon != undefined) ? `http://openweathermap.org/img/wn/${icon}@2x.png` : 'http://openweathermap.org/img/wn/10d@2x.png';
 
   return (
     <div style={styles.container}>

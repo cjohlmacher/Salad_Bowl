@@ -22,7 +22,7 @@ const NewsStory = (props) => {
 
   return (
     <div style={styles.container}>
-      <div style={styles.body} class="body">
+      <div style={styles.body}>
         <Headline title={headlineTitle} subTitle={headlineSubtitle} />
         <MainStory summary={mainStorySummary} />
         <CommunityBar>

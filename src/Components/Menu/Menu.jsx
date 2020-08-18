@@ -18,6 +18,7 @@ const Menu = (props) => {
     <div style={activeStyle}>
       <p style={styles.text}>Log-out</p>
       <p style={styles.text}>See Friends List</p>
+      <p style={styles.text}>Change Filters</p>
       <p style={styles.text}>Change Account Information</p>
     </div>
   )
