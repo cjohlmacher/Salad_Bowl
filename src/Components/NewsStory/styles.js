@@ -1,15 +1,13 @@
-
 const styles = {
     author: {
         fontStyle: 'italic',
     },
     container: {
-        color: 'blue',
-        backgroundColor: 'white',
+        color: 'black',
         borderWidth: '2px 2px',
         borderStyle: 'solid',
         borderRadius: '2px',
-        borderColor: 'lightblue',
+        borderColor: 'black',
         padding: '5px 5px',
         margin: '2px 2px',
         display: 'flex',

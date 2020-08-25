@@ -12,10 +12,11 @@ const styles = {
     textAlign: 'center',
     alignItems: 'center',
     fontWeight: '500',
+    cursor: 'pointer',
   },
   inactive: {
     display: 'flex',
-    backgroundColor: 'lightgrey',
+    backgroundColor: 'white',
     color: 'black',
     borderRadius: '10px',
     padding: '0px 8px',
@@ -23,9 +24,11 @@ const styles = {
     height: '35px',
     textAlign: 'center',
     alignItems: 'center',
+    cursor: 'pointer',
   },
   text: {
     margin: '0px 0px',
+    userSelect: 'none',
   },
 };
 

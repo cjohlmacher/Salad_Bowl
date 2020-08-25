@@ -3,6 +3,7 @@ import styles from './styles'
 import NewsStory from '../NewsStory';
 import Filter from '../Filter';
 import FilterBar from '../FilterBar';
+import config from '../../config.js'
 
 const NewsFeed = (props) => {
   const {
@@ -12,12 +13,13 @@ const NewsFeed = (props) => {
 
   //News Filter Creation
   const initialNewsFilters = {
+    "Business": true,
+    "Technology": true,
+    "Entertainment": true,
     "Health": true,
-    "Tech": true,
-    "Politics": true,
-    "International": true,
-    "Local": true,
+    "Sports": true,
     "Science": true,
+    "General": true,
   };
 
   const [newsFilterState, setNewsFilterState] = useState(initialNewsFilters);
@@ -53,100 +55,88 @@ const NewsFeed = (props) => {
   //ShareBar - News
   const [sharingNewsStoryId, setSharingNewsStoryId] = useState(null);
 
-  const newsStoryList = [
-    {
-      id: 1,
-      headlineTitle: "Suntan Lotion cures Smallpox",
-      headlineSubtitle: "Nosun Nemore",
-      mainStorySummary: "Studies show that suntan lotion applied on the elbow and armpit is able to reverse the...",
-      interactionCount: 3,
-      categories: ["Health", "Science"],
-    },
-    {
-      id: 2,
-      headlineTitle: "Dog Saves Bear from Avalanche",
-      headlineSubtitle: "Fido Smokey",
-      mainStorySummary: "An inspiring story coming out of Lake Tahoe this weekend. A bear nearly swallowed by an...",
-      interactionCount: 0,
-      categories: ["Local"],
-    },
-    {
-      id: 3,
-      headlineTitle: "Listening to Dua Lipa causes Mumps",
-      headlineSubtitle: "NuRules Icountem",
-      mainStorySummary: "Studies show that suntan lotion applied on the elbow and armpit is able to reverse the...",
-      interactionCount: 1,
-      categories: ["Health"],
-    },
-    {
-      id: 4,
-      headlineTitle: "Mailman Wins Lottery - Shares With Dog",
-      headlineSubtitle: "Foo Foo",
-      mainStorySummary: "A local mailman had the winning ticket in Tuesday's lotto taking in over 64 million...",
-      interactionCount: 100,
-      categories: ["Local"],
-    },
-    {
-      id: 5,
-      headlineTitle: "World Leaders Gather in Miami for Flash Mob",
-      headlineSubtitle: "Ivanna Dancewithsomebody",
-      mainStorySummary: "Leaders from Denmark, Nepal, Canada, and Japan gathered yesterday in a coordinated rendition of Britney Spears' hit song 'Toxic'...",
-      interactionCount: 100,
-      categories: ["International", "Politics"],
-    },
-    {
-      id: 6,
-      headlineTitle: "Solo Tango Dancer Defies Preconceptions About Genre",
-      headlineSubtitle: "Walt Zinaname",
-      mainStorySummary: "Contrary to popular belief, tango dancer Gnome Chompsky does not believe it takes 'two to tango'.  He is perfectly happy dancing the tango alone.",
-      interactionCount: 100,
-      categories: ["Local"],
-    },
-  ];
+  const initialNewsData = {
+  };
 
-  const newsStoryComponents = newsStoryList.filter(function (story) {
-    let desiredCategory = false;
+  //News API call
+  const [newsStoryState, setNewsStoryState] = useState(initialNewsData);
+  const [categoryIndex, setCategoryIndex] = useState(0);
+  let categories = Object.keys(newsFilterState);
 
-    for (var i = 0; i < story.categories.length; i++) {
-      if (newsFilterState[story.categories[i]] === true) {
-        desiredCategory = true;
-      }
-    }
-
-    return desiredCategory === true;
-
-  }).map(function (story) {
-
-    const handleCommentButtonPress = () => {
-      if (commentingNewsStoryId === story.id) {
-        setCommentingNewsStoryId(null);
-      } else {
-        setCommentingNewsStoryId(story.id);
-      }
+  useEffect(() => {
+    if (categoryIndex < categories.length) {
+      let url = `https://newsapi.org/v2/top-headlines?country=us&category=${categories[categoryIndex]}&apiKey=${config.NEWS_API_CLIENT_ID}`;
+      fetch(url)
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          const modifiedNewsStoryState = {
+            ...newsStoryState,
+            [categories[categoryIndex]]: data,
+          }
+          setNewsStoryState(modifiedNewsStoryState);
+        });
     };
+  }, [categoryIndex]);
 
-    const handleShareButtonPress = () => {
-      if (sharingNewsStoryId === story.id) {
-        setSharingNewsStoryId(null);
-      } else {
-        setSharingNewsStoryId(story.id);
-      }
+  useEffect(() => {
+    if (Object.keys(newsStoryState).length > 0) {
+      setCategoryIndex(categoryIndex + 1);
     }
+  }, [newsStoryState]);
 
-    return (
-      <NewsStory
-        headlineTitle={story.headlineTitle}
-        headlineSubtitle={story.headlineSubtitle}
-        mainStorySummary={story.mainStorySummary}
-        interactionCount={story.interactionCount}
-        commentBarActive={story.id === commentingNewsStoryId}
-        shareBarActive={story.id === sharingNewsStoryId}
-        handleCommentButtonPress={handleCommentButtonPress}
-        handleShareButtonPress={handleShareButtonPress}
-      />
-    );
-  })
+  //Set variables for number of articles to display
+  const max_articles = 20;
 
+  let activeFilterCount = 0;
+  for (var i = 0; i < Object.keys(newsStoryState).length; i++) {
+    if (newsFilterState[Object.keys(newsStoryState)[i]] === true) {
+      activeFilterCount++;
+    }
+  };
+
+  //Create Story Components
+  let newsStoryComponents = [];
+  if (Object.keys(newsStoryState).length > 0) {
+    newsStoryComponents = Object.keys(newsStoryState).filter(function (category) {
+      return newsFilterState[category] === true;
+    }).map(function (category) {
+      return newsStoryState[category].articles.slice(0, max_articles / activeFilterCount).map(function (story) {
+
+        const handleCommentButtonPress = () => {
+          if (commentingNewsStoryId === story.url) {
+            setCommentingNewsStoryId(null);
+          } else {
+            setCommentingNewsStoryId(story.url);
+          }
+        };
+
+        const handleShareButtonPress = () => {
+          if (sharingNewsStoryId === story.url) {
+            setSharingNewsStoryId(null);
+          } else {
+            setSharingNewsStoryId(story.url);
+          }
+        }
+
+        return (
+          <NewsStory
+            headlineTitle={story.title}
+            headlineSubtitle={story.author}
+            mainStorySummary={story.description}
+            interactionCount={100}
+            commentBarActive={story.url === commentingNewsStoryId}
+            shareBarActive={story.url === sharingNewsStoryId}
+            handleCommentButtonPress={handleCommentButtonPress}
+            handleShareButtonPress={handleShareButtonPress}
+          />
+        );
+      });
+    });
+  };
+
+  //Return NewsFeed Component
   return (
     <div style={styles}>
       <h1>News Feed</h1>
@@ -156,6 +146,6 @@ const NewsFeed = (props) => {
       {newsStoryComponents}
     </div>
   )
-}
+};
 
 export default NewsFeed;

@@ -1,5 +1,7 @@
+import texture from './imageURLS.js'
+
 const styles = {
-  borderColor: 'lightblue',
+  borderColor: 'black',
   borderStyle: 'solid',
   borderWidth: '2px',
   borderRadius: '2px',
@@ -7,6 +9,9 @@ const styles = {
   margin: '2px 2px',
   display: 'flex',
   flexDirection: 'column',
+  color: 'white',
+  backgroundColor: 'rgb(62 55 59)',
+  backgroundImage: `url(${texture})`,
 };
 
 export default styles;

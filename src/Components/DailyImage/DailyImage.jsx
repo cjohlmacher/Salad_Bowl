@@ -29,7 +29,7 @@ const DailyImage = (props) => {
   }, []);
 
   return (
-    <div>
+    <div style={styles.container}>
       <img style={styles.inspoPic} src={dailyImageData?.urls?.regular} />
       <p style={styles.inspoText}>Image credit: {dailyImageData?.user?.name}</p>
     </div>

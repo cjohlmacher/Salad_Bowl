@@ -16,7 +16,7 @@ const CommentBar = (props) => {
 
   return (
     <div>
-      <input style={activeStyle} type="text">
+      <input style={activeStyle} type="text" placeholder="Write a comment...">
       </input>
     </div>
   );
