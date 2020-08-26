@@ -64,27 +64,29 @@ const NewsFeed = (props) => {
   let categories = Object.keys(newsFilterState);
 
   useEffect(() => {
-    if (categoryIndex < categories.length) {
-      let url = `https://newsapi.org/v2/top-headlines?country=us&category=${categories[categoryIndex]}&apiKey=${config.NEWS_API_CLIENT_ID}`;
-      fetch(url)
+    const fetchPromises = categories.map(function (category) {
+      const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${config.NEWS_API_CLIENT_ID}`;
+
+      return fetch(url)
         .then(response => {
           return response.json();
-        })
-        .then(data => {
-          const modifiedNewsStoryState = {
-            ...newsStoryState,
-            [categories[categoryIndex]]: data,
-          }
-          setNewsStoryState(modifiedNewsStoryState);
         });
-    };
-  }, [categoryIndex]);
+    });
 
-  useEffect(() => {
-    if (Object.keys(newsStoryState).length > 0) {
-      setCategoryIndex(categoryIndex + 1);
-    }
-  }, [newsStoryState]);
+    Promise.all(fetchPromises)
+      .then((data) => {
+        const modifiedNewsStoryState = data.reduce((accNewsStoryState, datum, index) => {
+          const modified = {
+            ...accNewsStoryState,
+            [categories[index]]: datum
+          };
+
+          return modified;
+        }, {});
+
+        setNewsStoryState(modifiedNewsStoryState);
+      });
+  }, []);
 
   //Set variables for number of articles to display
   const max_articles = 20;

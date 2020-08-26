@@ -21,7 +21,7 @@ const Event = (props) => {
     handleShareButtonPress,
   } = props;
 
-  const timeText = `Start time: ${startTime}`
+  const timeText = `${startTime}`
 
   const [rsvpActive, setRsvpActive] = useState(false);
 

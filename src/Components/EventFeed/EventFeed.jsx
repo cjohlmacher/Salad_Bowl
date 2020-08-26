@@ -4,6 +4,7 @@ import Filter from '../Filter'
 import FilterBar from '../FilterBar'
 import Event from '../Event'
 import config from '../../config.js'
+import moment from 'moment-timezone';
 
 const EventFeed = (props) => {
   const {
@@ -93,56 +94,48 @@ const EventFeed = (props) => {
 
   let eventComponents = [];
 
-  if (Object.keys(eventsData).length > 0) {
-    eventComponents = eventsData?.events?.map(function (specificEvent) {
-      let desiredCategory = false;
-
-      for (var i = 0; i < specificEvent?.taxonomies?.length; i++) {
-        let taxonomy = specificEvent?.taxonomies[i].name;
-        taxonomy = taxonomy.charAt(0).toUpperCase() + taxonomy.slice(1);
-        if (taxonomy in eventFilterState) {
-          if (eventFilterState[taxonomy] == true) {
-            desiredCategory = true;
-          }
-        }
+  eventComponents = eventsData?.events?.filter(function (specificEvent) {
+    let taxonomies = specificEvent?.taxonomies ? specificEvent.taxonomies : [];
+    return taxonomies.some(function (taxonomy) {
+      let capTaxonomy = taxonomy.name.charAt(0).toUpperCase() + taxonomy.name.slice(1);
+      return eventFilterState[capTaxonomy];
+    });
+  }).map(function (specificEvent) {
+    const handleCommentButtonPress = () => {
+      if (commentingEventId === specificEvent.id) {
+        setCommentingEventId(null);
+      } else {
+        setCommentingEventId(specificEvent.id);
       }
+    };
 
-      if (desiredCategory == true) {
-        const handleCommentButtonPress = () => {
-          if (commentingEventId === specificEvent.id) {
-            setCommentingEventId(null);
-          } else {
-            setCommentingEventId(specificEvent.id);
-          }
-        };
-
-        const handleShareButtonPress = () => {
-          if (sharingEventId === specificEvent.id) {
-            setSharingEventId(null);
-          } else {
-            setSharingEventId(specificEvent.id);
-          }
-        }
-
-        const formattedTime = specificEvent.datetime_local.slice(11, 16);
-
-        return (
-          <Event
-            key={specificEvent.id}
-            eventName={specificEvent.title}
-            startTime={formattedTime}
-            location={specificEvent.venue.display_location}
-            attendees={0}
-            commentBarActive={specificEvent.id === commentingEventId}
-            shareBarActive={specificEvent.id === sharingEventId}
-            handleCommentButtonPress={handleCommentButtonPress}
-            handleShareButtonPress={handleShareButtonPress}
-          />
-        )
+    const handleShareButtonPress = () => {
+      if (sharingEventId === specificEvent.id) {
+        setSharingEventId(null);
+      } else {
+        setSharingEventId(specificEvent.id);
       }
+    };
 
-    })
-  }
+    const timestamp_utc = specificEvent.datetime_utc;
+    const timezone = specificEvent.venue.timezone;
+    const date = moment.utc(timestamp_utc).tz(timezone);
+    const formattedTime = date.format("dddd MMM Do, YYYY [@] h:mm zz");
+
+    return (
+      <Event
+        key={specificEvent.id}
+        eventName={specificEvent.title}
+        startTime={formattedTime}
+        location={specificEvent.venue.display_location}
+        attendees={0}
+        commentBarActive={specificEvent.id === commentingEventId}
+        shareBarActive={specificEvent.id === sharingEventId}
+        handleCommentButtonPress={handleCommentButtonPress}
+        handleShareButtonPress={handleShareButtonPress}
+      />
+    )
+  });
 
   return (
     <div style={styles}>
