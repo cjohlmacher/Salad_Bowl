@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { Switch, Route } from "react-router-dom";
 
 import NewsStory from './Components/NewsStory'
 import Header from './Components/Header'
@@ -27,7 +28,7 @@ function App() {
   return (
     <div className="App">
       <Header
-        greeting="What's up, Chicago!"
+        greeting="Filter Page!"
       >
         <PopUpIcon
           tag="fas fa-bars"
@@ -38,17 +39,24 @@ function App() {
           active={menuIconEnabled}
         />
       </Header>
-      <DailyImage />
-      <Body>
-        <PageDivider>
-          <NewsFeed />
-        </PageDivider>
-        <PageDivider>
-          <Weather />
-          <EventFeed />
-        </PageDivider>
-      </Body>
+      <Switch>
+        <Route path="/settings">
+        </Route>
+        <Route path="/">
+          <DailyImage />
+          <Body>
+            <PageDivider>
+              <NewsFeed />
+            </PageDivider>
+            <PageDivider>
+              <Weather />
+              <EventFeed />
+            </PageDivider>
+          </Body>
+        </Route>
+      </Switch>
     </div>
+
   );
 }
 

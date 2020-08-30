@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './styles'
+import { NavLink } from "react-router-dom";
 
 const Menu = (props) => {
   const {
@@ -16,10 +17,18 @@ const Menu = (props) => {
 
   return (
     <div style={activeStyle}>
-      <p style={styles.text}>Log-out</p>
-      <p style={styles.text}>See Friends List</p>
-      <p style={styles.text}>Change Filters</p>
-      <p style={styles.text}>Change Account Information</p>
+      <NavLink exact to="/" style={styles.link} activeStyle={styles.activeLink}>
+        Home
+      </NavLink>
+      <NavLink exact to="/settings" style={styles.link} activeStyle={styles.activeLink}>
+        Settings
+      </NavLink>
+      <NavLink exact to="/friends" style={styles.link} activeStyle={styles.activeLink}>
+        Friends List
+      </NavLink>
+      <NavLink exact to="/" style={styles.link} activeStyle={styles.activeLink}>
+        Log Out
+      </NavLink>
     </div>
   )
 };

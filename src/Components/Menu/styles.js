@@ -4,7 +4,7 @@ const styles = {
     top: '52px',
     position: 'fixed',
     left: '5px',
-    width: 'auto',
+    width: '100px',
     backgroundColor: 'white',
     color: 'black',
     borderRadius: '5px',
@@ -14,10 +14,18 @@ const styles = {
   inactive: {
     display: 'none',
   },
-  text: {
-    padding: '0px 5px 5px 5px',
+  activeLink: {
+    color: 'black',
+    textDecoration: 'none',
+    backgroundColor: 'rgba(173, 216, 230, 0.5)',
+  },
+  link: {
+    padding: '5px 5px 5px 5px',
+    display: 'block',
+    textDecoration: 'none',
+    color: 'black',
     borderBottom: '1px dashed silver',
-  }
+  },
 };
 
 export default styles;
