@@ -21,7 +21,7 @@ const Menu = (props) => {
         Home
       </NavLink>
       <NavLink exact to="/settings" style={styles.link} activeStyle={styles.activeLink}>
-        Settings
+        Customization
       </NavLink>
       <NavLink exact to="/friends" style={styles.link} activeStyle={styles.activeLink}>
         Friends List

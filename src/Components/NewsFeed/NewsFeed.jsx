@@ -3,47 +3,36 @@ import styles from './styles'
 import NewsStory from '../NewsStory';
 import Filter from '../Filter';
 import FilterBar from '../FilterBar';
-import config from '../../config.js'
+import config from '../../config.js';
+import { connect } from 'react-redux';
 
 const NewsFeed = (props) => {
   const {
     children,
+    newsFilters = {},
+    handleTechnologyFilterClick,
   } = props;
 
 
   //News Filter Creation
-  const initialNewsFilters = {
-    "Business": true,
-    "Technology": true,
-    "Entertainment": true,
-    "Health": true,
-    "Sports": true,
-    "Science": true,
-    "General": true,
-  };
 
-  const [newsFilterState, setNewsFilterState] = useState(initialNewsFilters);
+  // const newsFilterNames = [
+  //   "Business",
+  //   "Technology",
+  //   "Entertainment",
+  //   "Health",
+  //   "Sports",
+  //   "Science",
+  //   "General"
+  // ];
 
-  const changeFilter = (filterName, newFilterValue) => {
-
-    const modifiedFilterState = {
-      ...newsFilterState,
-      [filterName]: newFilterValue,
-    }
-    setNewsFilterState(modifiedFilterState)
-  }
-
-  const filterNewsComponents = Object.keys(initialNewsFilters).map(function (filterName) {
-    const currentFilterValue = newsFilterState[filterName];
-
-    const handleFilterClick = () => {
-      changeFilter(filterName, !currentFilterValue)
-    }
+  const filterNewsComponents = Object.keys(newsFilters).map(function (filterName) {
+    const currentFilterValue = newsFilters[filterName];
 
     return (
       <Filter
         active={currentFilterValue}
-        onToggleFilter={handleFilterClick}
+        onToggleFilter={handleTechnologyFilterClick}
         topic={filterName}
       />
     );
@@ -61,7 +50,7 @@ const NewsFeed = (props) => {
   //News API call
   const [newsStoryState, setNewsStoryState] = useState(initialNewsData);
   const [categoryIndex, setCategoryIndex] = useState(0);
-  let categories = Object.keys(newsFilterState);
+  let categories = Object.keys(newsFilters);
 
   useEffect(() => {
     const fetchPromises = categories.map(function (category) {
@@ -93,16 +82,16 @@ const NewsFeed = (props) => {
 
   let activeFilterCount = 0;
   for (var i = 0; i < Object.keys(newsStoryState).length; i++) {
-    if (newsFilterState[Object.keys(newsStoryState)[i]] === true) {
+    if (newsFilters[Object.keys(newsStoryState)[i]] === true) {
       activeFilterCount++;
-    }
+    };
   };
 
   //Create Story Components
   let newsStoryComponents = [];
   if (Object.keys(newsStoryState).length > 0) {
     newsStoryComponents = Object.keys(newsStoryState).filter(function (category) {
-      return newsFilterState[category] === true;
+      return newsFilters[category] === true;
     }).map(function (category) {
       return newsStoryState[category].articles.slice(0, max_articles / activeFilterCount).map(function (story) {
 
@@ -125,6 +114,7 @@ const NewsFeed = (props) => {
         return (
           <NewsStory
             headlineTitle={story.title}
+            storyUrl={story.url}
             headlineSubtitle={story.author}
             mainStorySummary={story.description}
             interactionCount={100}
@@ -150,4 +140,26 @@ const NewsFeed = (props) => {
   )
 };
 
-export default NewsFeed;
+//responsible for mapping global state into component props
+function mapStateToProps(state) {
+  const newsFilters = state.newsFilters;
+  return {
+    newsFilters,
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    handleTechnologyFilterClick(category) {
+      const toggleAction = {
+        type: 'TOGGLE_NEWS_FILTER',
+        payload: category,
+      };
+      dispatch(toggleAction);
+    },
+  };
+};
+
+const ConnectedNewsFeed = connect(mapStateToProps, mapDispatchToProps)(NewsFeed);
+
+export default ConnectedNewsFeed;

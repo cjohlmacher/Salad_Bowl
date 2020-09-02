@@ -8,6 +8,13 @@ const styles = {
     textAlign: 'left',
     margin: '5px 0px',
     fontStyle: 'italic',
+  },
+  hidden: {
+    display: 'none',
+  },
+  url: {
+    color: 'black',
+    textDecoration: 'none',
   }
 };
 
