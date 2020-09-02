@@ -17,7 +17,7 @@ const Filter = (props) => {
   }
 
   const handleClick = () => {
-    onToggleFilter();
+    onToggleFilter(topic);
   };
 
   return (
@@ -38,7 +38,7 @@ class Filter extends React.Component {
       likesDogs: true,
       likesCats: false,
     };
-    
+
     THE OTHER WAY WOULD BE IN FUNCTIONAL COMPONENTS:
     const [likesDogs, setLikesDogs] = useState(true);
     const [likesCats, setLikesCats] = useState(false);

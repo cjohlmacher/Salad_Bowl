@@ -11,6 +11,7 @@ import CommunityBar from '../CommunityBar';
 const NewsStory = (props) => {
   const {
     headlineTitle,
+    storyUrl,
     headlineSubtitle,
     mainStorySummary,
     interactionCount,
@@ -23,7 +24,7 @@ const NewsStory = (props) => {
   return (
     <div style={styles.container}>
       <div style={styles.body}>
-        <Headline title={headlineTitle} subTitle={headlineSubtitle} />
+        <Headline title={headlineTitle} subTitle={headlineSubtitle} storyUrl={storyUrl} />
         <MainStory summary={mainStorySummary} />
         <CommunityBar>
           <InteractionCounter count={interactionCount} type='news' />

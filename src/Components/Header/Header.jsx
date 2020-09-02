@@ -5,12 +5,13 @@ import Banner from '../Banner';
 const Header = (props) => {
   const {
     children,
+    headline,
   } = props;
 
   return (
     <header style={styles}>
       {children}
-      <Banner headline="SaladBowl: Fresh News and Events" />
+      <Banner headline={headline} />
     </header>
   )
 }

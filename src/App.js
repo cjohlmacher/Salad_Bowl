@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Switch, Route } from "react-router-dom";
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
-import NewsStory from './Components/NewsStory'
 import Header from './Components/Header'
 import PopUpIcon from './Components/PopUpIcon'
-import Banner from './Components/Banner'
 import Body from './Components/Body'
 import NewsFeed from './Components/NewsFeed'
 import EventFeed from './Components/EventFeed'
 import Weather from './Components/Weather';
-import FilterBar from './Components/FilterBar';
-import Filter from './Components/Filter';
 import PageDivider from './Components/PageDivider';
 import Menu from './Components/Menu';
 import DailyImage from './Components/DailyImage';
+import Settings from './Components/Settings';
+import rootReducer from './redux/rootReducer';
+
+const store = createStore(rootReducer);
 
 function App() {
 
@@ -26,36 +28,39 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Header
-        greeting="Filter Page!"
-      >
-        <PopUpIcon
-          tag="fas fa-bars"
-          active={menuIconEnabled}
-          onMenuClick={handleMenuClick}
-        />
-        <Menu
-          active={menuIconEnabled}
-        />
-      </Header>
-      <Switch>
-        <Route path="/settings">
-        </Route>
-        <Route path="/">
-          <DailyImage />
-          <Body>
-            <PageDivider>
-              <NewsFeed />
-            </PageDivider>
-            <PageDivider>
-              <Weather />
-              <EventFeed />
-            </PageDivider>
-          </Body>
-        </Route>
-      </Switch>
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <Header
+          headline="Salad Bowl: Fresh News and Events"
+        >
+          <PopUpIcon
+            tag="fas fa-bars"
+            active={menuIconEnabled}
+            onMenuClick={handleMenuClick}
+          />
+          <Menu
+            active={menuIconEnabled}
+          />
+        </Header>
+        <Switch>
+          <Route path="/settings">
+            <Settings />
+          </Route>
+          <Route path="/">
+            <DailyImage />
+          </Route>
+        </Switch>
+        <Body>
+          <PageDivider>
+            <NewsFeed />
+          </PageDivider>
+          <PageDivider>
+            <Weather />
+            <EventFeed />
+          </PageDivider>
+        </Body>
+      </div >
+    </Provider >
 
   );
 }

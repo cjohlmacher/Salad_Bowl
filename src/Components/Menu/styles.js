@@ -4,7 +4,7 @@ const styles = {
     top: '52px',
     position: 'fixed',
     left: '5px',
-    width: '100px',
+    width: 'auto',
     backgroundColor: 'white',
     color: 'black',
     borderRadius: '5px',
