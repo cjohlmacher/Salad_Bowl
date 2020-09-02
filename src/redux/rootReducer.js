@@ -67,7 +67,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         eventsFilters: {
           ...state.eventsFilters,
-          payload: false,
+          [payload]: false,
         }
       };
     case "ENABLE_EVENTS_FILTER":
@@ -75,7 +75,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         eventsFilters: {
           ...state.eventsFilters,
-          payload: true,
+          [payload]: true,
         }
       };
     case "TOGGLE_EVENTS_FILTER":

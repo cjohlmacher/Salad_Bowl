@@ -10,7 +10,6 @@ const ListItem = (props) => {
   } = props;
 
   function handleClick(e) {
-    console.log(e);
     selectHandler(e.target.value);
   };
 
