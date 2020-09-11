@@ -11,7 +11,7 @@ const styles = {
   window: {
     width: '75vw',
     backgroundColor: 'white',
-    height: '300px',
+    height: 'auto',
     margin: '60px 0px 0px 0px',
     borderRadius: '10px',
     display: 'flex',

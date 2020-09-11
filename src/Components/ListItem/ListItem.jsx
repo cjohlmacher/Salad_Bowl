@@ -7,6 +7,7 @@ const ListItem = (props) => {
     type,
     listValue,
     selectHandler,
+    checked,
   } = props;
 
   function handleClick(e) {
@@ -15,7 +16,7 @@ const ListItem = (props) => {
 
   return (
     <div style={styles.window}>
-      <input type={type} name={listHeader} value={listValue} onClick={(e) => handleClick(e)} />
+      <input type={type} name={listHeader} value={listValue} onClick={(e) => handleClick(e)} checked={checked}/>
       <label>{listValue}</label>
     </div>
   )

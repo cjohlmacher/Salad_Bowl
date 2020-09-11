@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux';
+
+import config from '../../config.js';
 import styles from './styles'
 import NewsStory from '../NewsStory';
 import Filter from '../Filter';
 import FilterBar from '../FilterBar';
-import config from '../../config.js';
-import { connect } from 'react-redux';
+import { toggleNewsFilter } from '../../redux/actions/newsFilters';
 
 const NewsFeed = (props) => {
   const {
@@ -13,21 +15,10 @@ const NewsFeed = (props) => {
     handleTechnologyFilterClick,
   } = props;
 
-
-  //News Filter Creation
-
-  // const newsFilterNames = [
-  //   "Business",
-  //   "Technology",
-  //   "Entertainment",
-  //   "Health",
-  //   "Sports",
-  //   "Science",
-  //   "General"
-  // ];
-
-  const filterNewsComponents = Object.keys(newsFilters).map(function (filterName) {
-    const currentFilterValue = newsFilters[filterName];
+  const filterNewsComponents = Object.keys(newsFilters).filter(function (filterName) {
+    return newsFilters[filterName].listed;
+  }).map(function (filterName) {
+    const currentFilterValue = newsFilters[filterName].active;
 
     return (
       <Filter
@@ -81,17 +72,18 @@ const NewsFeed = (props) => {
   const max_articles = 20;
 
   let activeFilterCount = 0;
-  for (var i = 0; i < Object.keys(newsStoryState).length; i++) {
-    if (newsFilters[Object.keys(newsStoryState)[i]] === true) {
+  let newsKeys = Object.keys(newsStoryState);
+  for (var i = 0; i < newsKeys.length; i++) {
+    if (newsFilters[newsKeys[i]].active === true) {
       activeFilterCount++;
     };
   };
 
   //Create Story Components
   let newsStoryComponents = [];
-  if (Object.keys(newsStoryState).length > 0) {
-    newsStoryComponents = Object.keys(newsStoryState).filter(function (category) {
-      return newsFilters[category] === true;
+  if (newsKeys.length > 0) {
+    newsStoryComponents = newsKeys.filter(function (category) {
+      return newsFilters[category].active === true;
     }).map(function (category) {
       return newsStoryState[category].articles.slice(0, max_articles / activeFilterCount).map(function (story) {
 
@@ -151,11 +143,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     handleTechnologyFilterClick(category) {
-      const toggleAction = {
-        type: 'TOGGLE_NEWS_FILTER',
-        payload: category,
-      };
-      dispatch(toggleAction);
+      dispatch(toggleNewsFilter(category));
     },
   };
 };

@@ -1,29 +1,20 @@
 import React, { useState, useEffect } from 'react'
+import moment from 'moment-timezone';
+import { connect } from 'react-redux';
+
 import styles from './styles'
 import Filter from '../Filter'
 import FilterBar from '../FilterBar'
 import Event from '../Event'
 import config from '../../config.js'
-import moment from 'moment-timezone';
+import { toggleEventsFilter } from '../../redux/actions/eventsFilters';
 
 const EventFeed = (props) => {
   const {
     children,
+    eventFilters = {},
+    handleEventFilterClick,
   } = props;
-
-  //Events Filter Creation
-
-  const initialEventFilters = {
-    "Sports": true,
-    "F1 Racing": true,
-    "Concert": true,
-    "Literary": true,
-    "Family Entertainment": true,
-    "Theater": true,
-    "Film": true,
-  }
-
-  const [eventFilterState, setEventFilterState] = useState(initialEventFilters)
 
   /*
   //Saving this code for a later expanded filter functionality
@@ -42,33 +33,28 @@ const EventFeed = (props) => {
       });
   }, []);
   */
+  //Events Filter Creation
 
-  let filterEventsComponents = []
-  filterEventsComponents = Object.keys(initialEventFilters).map(function (eventCategory) {
+  let filterEventsComponents = [];
 
-    const currentFilterValue = eventFilterState[eventCategory]
+  filterEventsComponents = Object.keys(eventFilters).filter(function (eventCategory) {
+    return eventFilters[eventCategory].listed;
+  }).map(function (eventCategory) {
+
+    const currentFilterValue = eventFilters[eventCategory].active;
 
     const handleFilterClick = () => {
-      changeEventFilterState(eventCategory, !currentFilterValue)
+      handleEventFilterClick(eventCategory);
     }
 
     return (
       <Filter
-        active={eventFilterState[eventCategory]}
+        active={currentFilterValue}
         onToggleFilter={handleFilterClick}
         topic={eventCategory}
       />
     );
   })
-
-  const changeEventFilterState = (filterName, newFilterValue) => {
-
-    const modifiedFilterState = {
-      ...eventFilterState,
-      [filterName]: newFilterValue,
-    }
-    setEventFilterState(modifiedFilterState)
-  }
 
   //Events
   //CommentBar - Events
@@ -80,7 +66,7 @@ const EventFeed = (props) => {
   const [eventsData, setEventsData] = useState({});
 
   useEffect(() => {
-    const url = `https://api.seatgeek.com/2/events?geoip=true&client_id=${config.SEAT_GEEK_CLIENT_ID}`;
+    const url = `https://api.seatgeek.com/2/events?geoip=true&per_page=30&client_id=${config.SEAT_GEEK_CLIENT_ID}`;
 
     fetch(url)
       .then(response => {
@@ -94,11 +80,27 @@ const EventFeed = (props) => {
 
   let eventComponents = [];
 
+  const slugToKey = function(taxonomyName) {
+    let eventKey = taxonomyName;
+    eventKey = eventKey.split('_');
+    eventKey = eventKey.map(function(word) {
+      word = word.charAt(0).toUpperCase()+word.slice(1);
+      return word;
+    });
+    eventKey = eventKey.join(" ");
+    return eventKey
+  };
+
   eventComponents = eventsData?.events?.filter(function (specificEvent) {
     let taxonomies = specificEvent?.taxonomies ? specificEvent.taxonomies : [];
     return taxonomies.some(function (taxonomy) {
-      let capTaxonomy = taxonomy.name.charAt(0).toUpperCase() + taxonomy.name.slice(1);
-      return eventFilterState[capTaxonomy];
+      let keyedTaxonomy = slugToKey(taxonomy?.name);
+      console.log(keyedTaxonomy);
+      if (Object.keys(eventFilters).includes(keyedTaxonomy)) {
+        return eventFilters[keyedTaxonomy].active;
+      } else {
+        return false;
+      }
     });
   }).map(function (specificEvent) {
     const handleCommentButtonPress = () => {
@@ -148,4 +150,21 @@ const EventFeed = (props) => {
   );
 }
 
-export default EventFeed;
+function mapStateToProps(state) {
+  const eventFilters = state.eventFilters;
+  return {
+    eventFilters,
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    handleEventFilterClick(category) {
+      dispatch(toggleEventsFilter(category));
+    },
+  };
+};
+
+const connectedEventFeed = connect(mapStateToProps, mapDispatchToProps)(EventFeed);
+
+export default connectedEventFeed;

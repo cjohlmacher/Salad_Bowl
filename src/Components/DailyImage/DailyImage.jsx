@@ -16,9 +16,10 @@ const DailyImage = (props) => {
   const [dailyImageData, setDailyImageData] = useState(initialImageUrl);
   let activeImageCategory;
 
-  for (let i = 0; i < Object.keys(imageCategory).length; i++) {
-    if (imageCategory[Object.keys(imageCategory)[i]] === true) {
-      activeImageCategory = Object.keys(imageCategory)[i];
+  const imageCategories = Object.keys(imageCategory);
+  for (let i = 0; i < imageCategories.length; i++) {
+    if (imageCategory[imageCategories[i]].listed === true) {
+      activeImageCategory = imageCategories[i];
     };
   };
 

@@ -14,7 +14,7 @@ import PageDivider from './Components/PageDivider';
 import Menu from './Components/Menu';
 import DailyImage from './Components/DailyImage';
 import Settings from './Components/Settings';
-import rootReducer from './redux/rootReducer';
+import rootReducer from './redux/reducers';
 
 const store = createStore(rootReducer);
 

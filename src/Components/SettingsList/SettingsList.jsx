@@ -8,26 +8,38 @@ const SettingsList = (props) => {
     listHeader,
     type,
     selectHandler,
+    containerGrow,
   } = props;
 
   const listEntries = [];
+  const listKeys = Object.keys(listItems);
 
-  for (let i = 0; i < Object.keys(listItems).length; i++) {
+  for (let i = 0; i < listKeys.length; i++) {
+    const currentKey = listItems[listKeys[i]];
     listEntries.push(
       <ListItem
         listHeader={listHeader}
-        listValue={Object.keys(listItems)[i]}
+        listValue={listKeys[i]}
         type={type}
         selectHandler={selectHandler}
+        checked={currentKey.listed===true}
       />
     );
   };
 
+  const windowStyling = {
+    ...styles.window,
+    flexBasis: 1,
+    flexGrow: containerGrow,
+  }
+
   return (
-    <div style={styles.window}>
+    <div style={styles.window} style={windowStyling}>
       <h3>{listHeader}</h3>
-      {listEntries}
-    </div>
+      <div style={styles.entries}>
+        {listEntries}
+      </div>
+    </div >
   )
 };
 
