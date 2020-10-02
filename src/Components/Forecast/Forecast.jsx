@@ -15,7 +15,7 @@ const Forecast = (props) => {
     forecastTimeOfDay,
   } = props;
 
-  let imgUrl = `http://openweathermap.org/img/wn/${forecastIcon}@2x.png`;
+  let imgUrl = (forecastIcon != undefined) ? `http://openweathermap.org/img/wn/${forecastIcon}@2x.png` : "http://openweathermap.org/img/wn/10d@2x.png";
 
   let forecastHeader;
   if (forecastTimeOfDay === 'evening') {

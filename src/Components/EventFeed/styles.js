@@ -1,3 +1,5 @@
+import texture from './imageURLS.js'
+
 const styles = {
   borderWidth: '5px 5px',
   borderStyle: 'solid',
@@ -8,6 +10,8 @@ const styles = {
   flexDirection: 'column',
   alignContent: 'center',
   justifyContent: 'center',
+  backgroundColor: 'white',
+  backgroundImage: `url(${texture})`,
 };
 
 export default styles;

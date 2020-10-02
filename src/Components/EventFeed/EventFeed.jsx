@@ -1,67 +1,29 @@
 import React, { useState, useEffect } from 'react'
+import moment from 'moment-timezone';
+import { connect } from 'react-redux';
+
 import styles from './styles'
 import Filter from '../Filter'
 import FilterBar from '../FilterBar'
 import Event from '../Event'
-import config from '../../config.js'
+import { toggleEventsFilter, getEvents } from '../../redux/actions/eventsFilters';
 
 const EventFeed = (props) => {
   const {
     children,
+    eventFilters = {},
+    eventsData = {},
+    loading,
+    handleEventFilterClick,
+    getEventsData,
   } = props;
 
-  //Events Filter Creation
+  /*
+  //Saving this code for a later expanded filter functionality
+  const [eventFilterData, setEventFilterData] = useState({})
 
-  const initialEventFilters = {
-    "Outdoors": false,
-    "21+": false,
-    "Athletic": false,
-    "Hobby": false,
-    "Art": false,
-    "Food": false,
-  }
-
-  const [eventFilterState, setEventFilterState] = useState(initialEventFilters)
-
-  const changeEventFilterState = (filterName, newFilterValue) => {
-
-    const modifiedFilterState = {
-      ...eventFilterState,
-      [filterName]: newFilterValue,
-    }
-    setEventFilterState(modifiedFilterState)
-  }
-
-  const filterEventsComponents = Object.keys(initialEventFilters).map(function (eventCategory) {
-
-    const currentFilterValue = eventFilterState[eventCategory]
-
-
-    const handleFilterClick = () => {
-      changeEventFilterState(eventCategory, !currentFilterValue)
-    }
-
-    return (
-      <Filter
-        active={eventFilterState[eventCategory]}
-        onToggleFilter={handleFilterClick}
-        topic={eventCategory}
-      />
-    );
-  });
-
-  //Events
-
-  //CommentBar - Events
-  const [commentingEventId, setCommentingEventId] = useState(null);
-
-  //ShareBar - Events
-  const [sharingEventId, setSharingEventId] = useState(null);
-
-  const [eventsData, setEventsData] = useState({});
-  console.log(process.env);
   useEffect(() => {
-    const url = `https://api.seatgeek.com/2/events?geoip=true&client_id=${config.SEAT_GEEK_CLIENT_ID}`;
+    const url = `https://api.seatgeek.com/2/taxonomies?&client_id=${config.SEAT_GEEK_CLIENT_ID}`;
 
     fetch(url)
       .then(response => {
@@ -69,45 +31,103 @@ const EventFeed = (props) => {
       })
       .then(data => {
         console.log(data);
-        setEventsData(data);
+        setEventFilterData(data);
       });
+  }, []);
+  */
+  //Events Filter Creation
+
+  let filterEventsComponents = [];
+
+  filterEventsComponents = Object.keys(eventFilters).filter(function (eventCategory) {
+    return eventFilters[eventCategory].listed;
+  }).map(function (eventCategory) {
+
+    const currentFilterValue = eventFilters[eventCategory].active;
+
+    const handleFilterClick = () => {
+      handleEventFilterClick(eventCategory);
+    }
+
+    return (
+      <Filter
+        active={currentFilterValue}
+        onToggleFilter={handleFilterClick}
+        topic={eventCategory}
+      />
+    );
+  })
+
+  //Events
+  //CommentBar - Events
+  const [commentingEventId, setCommentingEventId] = useState(null);
+
+  //ShareBar - Events
+  const [sharingEventId, setSharingEventId] = useState(null);
+
+  useEffect(() => {
+    getEventsData();
   }, []);
 
   let eventComponents = [];
 
-  if (Object.keys(eventsData).length > 0) {
-    eventComponents = eventsData?.events?.map(function (specificEvent) {
-      const handleCommentButtonPress = () => {
-        if (commentingEventId === specificEvent.id) {
-          setCommentingEventId(null);
-        } else {
-          setCommentingEventId(specificEvent.id);
-        }
-      };
+  const slugToKey = function(taxonomyName) {
+    let eventKey = taxonomyName;
+    eventKey = eventKey.split('_');
+    eventKey = eventKey.map(function(word) {
+      word = word.charAt(0).toUpperCase()+word.slice(1);
+      return word;
+    });
+    eventKey = eventKey.join(" ");
+    return eventKey
+  };
 
-      const handleShareButtonPress = () => {
-        if (sharingEventId === specificEvent.id) {
-          setSharingEventId(null);
-        } else {
-          setSharingEventId(specificEvent.id);
-        }
+  eventComponents = eventsData?.events?.filter(function (specificEvent) {
+    let taxonomies = specificEvent?.taxonomies ? specificEvent.taxonomies : [];
+    return taxonomies.some(function (taxonomy) {
+      let keyedTaxonomy = slugToKey(taxonomy?.name);
+      if (Object.keys(eventFilters).includes(keyedTaxonomy)) {
+        return eventFilters[keyedTaxonomy].active;
+      } else {
+        return false;
       }
+    });
+  }).map(function (specificEvent) {
+    const handleCommentButtonPress = () => {
+      if (commentingEventId === specificEvent.id) {
+        setCommentingEventId(null);
+      } else {
+        setCommentingEventId(specificEvent.id);
+      }
+    };
 
-      return (
-        <Event
-          key={specificEvent.id}
-          eventName={specificEvent.title}
-          startTime={specificEvent.datetime_local}
-          location={specificEvent.venue.display_location}
-          attendees={0}
-          commentBarActive={specificEvent.id === commentingEventId}
-          shareBarActive={specificEvent.id === sharingEventId}
-          handleCommentButtonPress={handleCommentButtonPress}
-          handleShareButtonPress={handleShareButtonPress}
-        />
-      )
-    })
-  }
+    const handleShareButtonPress = () => {
+      if (sharingEventId === specificEvent.id) {
+        setSharingEventId(null);
+      } else {
+        setSharingEventId(specificEvent.id);
+      }
+    };
+
+    const timestamp_utc = specificEvent.datetime_utc;
+    const timezone = specificEvent.venue.timezone;
+    const date = moment.utc(timestamp_utc).tz(timezone);
+    const formattedTime = date.format("dddd MMM Do, YYYY [@] h:mm zz");
+
+    return (
+      <Event
+        key={specificEvent.id}
+        eventName={specificEvent.title}
+        startTime={formattedTime}
+        location={specificEvent.venue.display_location}
+        attendees={0}
+        commentBarActive={specificEvent.id === commentingEventId}
+        shareBarActive={specificEvent.id === sharingEventId}
+        handleCommentButtonPress={handleCommentButtonPress}
+        handleShareButtonPress={handleShareButtonPress}
+      />
+    )
+  });
 
   return (
     <div style={styles}>
@@ -115,9 +135,33 @@ const EventFeed = (props) => {
       <FilterBar>
         {filterEventsComponents}
       </FilterBar>
-      {eventComponents}
+      {loading ? <div>Loading...</div> : eventComponents}
     </div>
   );
 }
 
-export default EventFeed;
+function mapStateToProps(state) {
+  const eventFilters = state.eventFilters.eventFilters;
+  const eventsData = state.eventFilters.eventsData;
+  const loading = state.eventFilters.loading;
+  return {
+    eventFilters,
+    eventsData,
+    loading,
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    handleEventFilterClick(category) {
+      dispatch(toggleEventsFilter(category));
+    },
+    getEventsData() {
+      dispatch(getEvents());
+    },
+  };
+};
+
+const connectedEventFeed = connect(mapStateToProps, mapDispatchToProps)(EventFeed);
+
+export default connectedEventFeed;

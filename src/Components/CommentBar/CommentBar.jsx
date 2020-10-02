@@ -1,5 +1,4 @@
 import React from 'react'
-
 import styles from './styles'
 
 const CommentBar = (props) => {
@@ -14,10 +13,10 @@ const CommentBar = (props) => {
   } else {
     activeStyle = styles.inactive
   }
-  
+
   return (
     <div>
-      <input style={activeStyle} type="text">
+      <input style={activeStyle} type="text" placeholder="Write a comment...">
       </input>
     </div>
   );

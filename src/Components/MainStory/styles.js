@@ -1,5 +1,5 @@
 const styles = {
-  width: '50%',
+  width: '75%',
   textAlign: 'left',
   margin: '0px 20px',
 };

@@ -6,8 +6,6 @@ import CommentBar from '../CommentBar'
 import ShareBar from '../ShareBar'
 import InteractionCounter from '../InteractionCounter'
 
-
-
 const Event = (props) => {
 
   const {
@@ -23,8 +21,7 @@ const Event = (props) => {
     handleShareButtonPress,
   } = props;
 
-
-  const timeText = `Start time: ${startTime}`
+  const timeText = `${startTime}`
 
   const [rsvpActive, setRsvpActive] = useState(false);
 
