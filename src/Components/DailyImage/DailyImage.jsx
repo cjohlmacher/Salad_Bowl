@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles';
-import config from '../../config.js'
 import { connect } from 'react-redux';
 
 const DailyImage = (props) => {
@@ -24,7 +23,7 @@ const DailyImage = (props) => {
   };
 
   useEffect(() => {
-    const url = `https://api.unsplash.com/photos/random?query=${activeImageCategory}&featured=true&client_id=${config.UNSPLASH_CLIENT_ID}`;
+    const url = `https://api.unsplash.com/photos/random?query=${activeImageCategory}&featured=true&client_id=${process.env.REACT_APP_UNSPLASH_CLIENT_ID}`;
 
     fetch(url)
       .then(response => {

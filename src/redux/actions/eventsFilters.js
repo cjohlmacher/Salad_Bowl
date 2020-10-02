@@ -1,5 +1,4 @@
 import { TOGGLE_EVENTS_FILTER, TOGGLE_EVENTS_LISTED, START_LOADING_EVENTS, LOAD_EVENTS } from '../actionTypes';
-import config from '../../config.js';
 
 export function toggleEventsFilter(category) {
   return {
@@ -32,7 +31,7 @@ export function loadEventResults(events) {
 export function getEvents() {
   return function(dispatch) {
     dispatch(startLoadingEvents());
-    const url = `https://api.seatgeek.com/2/events?geoip=true&per_page=30&client_id=${config.SEAT_GEEK_CLIENT_ID}`;
+    const url = `https://api.seatgeek.com/2/events?geoip=true&per_page=30&client_id=${process.env.REACT_APP_SEAT_GEEK_CLIENT_ID}`;
 
     fetch(url)
       .then(response => {

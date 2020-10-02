@@ -1,5 +1,4 @@
 import { TOGGLE_NEWS_FILTER, TOGGLE_NEWS_LISTED, START_LOADING_NEWS, LOAD_NEWS_RESULTS } from '../actionTypes';
-import config from '../../config.js';
 
 export function toggleNewsFilter(category) {
   return {
@@ -32,31 +31,8 @@ export function loadNewsResults(newsStoryMap) {
 export function getNewsStories(categories) {
   return function(dispatch) {
     dispatch(startLoadingNews())
-    // dispatch(loadNewsResults({
-    //   "Technology": {
-    //     articles: [],
-    //   },
-    //   "Business": {
-    //     articles: [],
-    //   },
-    //   "Entertainment": {
-    //     articles: [],
-    //   },
-    //   "Health": {
-    //     articles: [],
-    //   },
-    //   "Sports": {
-    //     articles: [],
-    //   },
-    //   "Science": {
-    //     articles: [],
-    //   },
-    //   "General": {
-    //     articles: [],
-    //   },
-    // }));
     const fetchPromises = categories.map(function (category) {
-      const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${config.NEWS_API_CLIENT_ID}`;
+      const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${process.env.REACT_APP_NEWS_API_CLIENT_ID}`;
 
       return fetch(url)
         .then(response => {
