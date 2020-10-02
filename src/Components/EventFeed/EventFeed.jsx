@@ -6,14 +6,16 @@ import styles from './styles'
 import Filter from '../Filter'
 import FilterBar from '../FilterBar'
 import Event from '../Event'
-import config from '../../config.js'
-import { toggleEventsFilter } from '../../redux/actions/eventsFilters';
+import { toggleEventsFilter, getEvents } from '../../redux/actions/eventsFilters';
 
 const EventFeed = (props) => {
   const {
     children,
     eventFilters = {},
+    eventsData = {},
+    loading,
     handleEventFilterClick,
+    getEventsData,
   } = props;
 
   /*
@@ -63,19 +65,8 @@ const EventFeed = (props) => {
   //ShareBar - Events
   const [sharingEventId, setSharingEventId] = useState(null);
 
-  const [eventsData, setEventsData] = useState({});
-
   useEffect(() => {
-    const url = `https://api.seatgeek.com/2/events?geoip=true&per_page=30&client_id=${config.SEAT_GEEK_CLIENT_ID}`;
-
-    fetch(url)
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        console.log(data);
-        setEventsData(data);
-      });
+    getEventsData();
   }, []);
 
   let eventComponents = [];
@@ -95,7 +86,6 @@ const EventFeed = (props) => {
     let taxonomies = specificEvent?.taxonomies ? specificEvent.taxonomies : [];
     return taxonomies.some(function (taxonomy) {
       let keyedTaxonomy = slugToKey(taxonomy?.name);
-      console.log(keyedTaxonomy);
       if (Object.keys(eventFilters).includes(keyedTaxonomy)) {
         return eventFilters[keyedTaxonomy].active;
       } else {
@@ -145,15 +135,19 @@ const EventFeed = (props) => {
       <FilterBar>
         {filterEventsComponents}
       </FilterBar>
-      {eventComponents}
+      {loading ? <div>Loading...</div> : eventComponents}
     </div>
   );
 }
 
 function mapStateToProps(state) {
-  const eventFilters = state.eventFilters;
+  const eventFilters = state.eventFilters.eventFilters;
+  const eventsData = state.eventFilters.eventsData;
+  const loading = state.eventFilters.loading;
   return {
     eventFilters,
+    eventsData,
+    loading,
   };
 };
 
@@ -161,6 +155,9 @@ function mapDispatchToProps(dispatch) {
   return {
     handleEventFilterClick(category) {
       dispatch(toggleEventsFilter(category));
+    },
+    getEventsData() {
+      dispatch(getEvents());
     },
   };
 };

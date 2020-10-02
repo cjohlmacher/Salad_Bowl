@@ -28,9 +28,9 @@ const SettingsBar = (props) => {
 };
 
 function mapStateToProps(state) {
-  const newsFilters = state.newsFilters;
+  const newsFilters = state.newsFilters.newsFilters;
   const imageCategory = state.imageCategory;
-  const eventFilters = state.eventFilters;
+  const eventFilters = state.eventFilters.eventFilters;
   return {
     newsFilters,
     imageCategory,
