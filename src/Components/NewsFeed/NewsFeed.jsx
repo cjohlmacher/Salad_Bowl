@@ -14,7 +14,7 @@ const NewsFeed = (props) => {
     loading,
     newsStoryMap = {},
     handleFilterClick,
-    loadNewsStories,
+    loadNewsStories = () => {},
   } = props;
 
   //Load News Stories
@@ -124,9 +124,9 @@ function mapDispatchToProps(dispatch) {
     handleFilterClick(category) {
       dispatch(toggleNewsFilter(category));
     },
-    loadNewsStories(categories) {
-      dispatch(getNewsStories(categories))
-    },
+    // loadNewsStories(categories) {
+    //   dispatch(getNewsStories(categories))
+    // },
   };
 };
 
