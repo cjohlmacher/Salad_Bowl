@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import thunkMiddleware from 'redux-thunk';
 import { Switch, Route } from "react-router-dom";
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import { applyMiddleware } from 'redux';
 
 import Header from './Components/Header'
 import PopUpIcon from './Components/PopUpIcon'
@@ -14,9 +16,13 @@ import PageDivider from './Components/PageDivider';
 import Menu from './Components/Menu';
 import DailyImage from './Components/DailyImage';
 import Settings from './Components/Settings';
-import rootReducer from './redux/rootReducer';
+import rootReducer from './redux/reducers';
 
-const store = createStore(rootReducer);
+const store = createStore(
+  rootReducer,
+  applyMiddleware(
+    thunkMiddleware,
+  ));
 
 function App() {
 

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+
 import styles from './styles';
 import SettingsList from '../SettingsList';
-import { connect } from 'react-redux';
+import { changeImageCategory } from '../../redux/actions/imageCategory';
+import { toggleEventsListed } from '../../redux/actions/eventsFilters';
+import { toggleNewsListed } from '../../redux/actions/newsFilters';
 
 const SettingsBar = (props) => {
   const {
@@ -10,23 +14,23 @@ const SettingsBar = (props) => {
     imageCategory,
     eventFilters,
     handleImageCategorySelection,
+    handleEventCategorySelection,
+    handleNewsCategorySelection,
   } = props;
-
-  const imageCategoryChoices = ['Puppy', 'Sports', 'Space', 'Flowers'];
 
   return (
     <div style={styles.window}>
-      <SettingsList listHeader="News" listItems={newsFilters} type="checkbox" selectHandler={handleImageCategorySelection} />
-      <SettingsList listHeader="Events" listItems={eventFilters} type="checkbox" selectHandler={handleImageCategorySelection} />
-      <SettingsList listHeader="Image" listItems={imageCategory} type="radio" selectHandler={handleImageCategorySelection} />
+      <SettingsList listHeader="News" listItems={newsFilters} type="checkbox" selectHandler={handleNewsCategorySelection} containerGrow={1} />
+      <SettingsList listHeader="Events" listItems={eventFilters} type="checkbox" selectHandler={handleEventCategorySelection} containerGrow={2} />
+      <SettingsList listHeader="Image" listItems={imageCategory} type="radio" selectHandler={handleImageCategorySelection} containerGrow={1} />
     </div>
   )
 };
 
 function mapStateToProps(state) {
-  const newsFilters = state.newsFilters;
+  const newsFilters = state.newsFilters.newsFilters;
   const imageCategory = state.imageCategory;
-  const eventFilters = state.eventFilters;
+  const eventFilters = state.eventFilters.eventFilters;
   return {
     newsFilters,
     imageCategory,
@@ -37,11 +41,13 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     handleImageCategorySelection(category) {
-      const categorySelect = {
-        type: 'CHANGE_IMAGE_CATEGORY',
-        payload: category,
-      };
-      dispatch(categorySelect);
+      dispatch(changeImageCategory(category));
+    },
+    handleEventCategorySelection(category) {
+      dispatch(toggleEventsListed(category));
+    },
+    handleNewsCategorySelection(category) {
+      dispatch(toggleNewsListed(category));
     },
   };
 };
