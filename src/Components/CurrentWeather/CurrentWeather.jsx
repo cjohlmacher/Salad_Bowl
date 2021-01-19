@@ -12,6 +12,7 @@ import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
 
 const CurrentWeather = (props) => {
   const {
+    location,
     weather,
     temp,
     humidity,
@@ -23,9 +24,14 @@ const CurrentWeather = (props) => {
 
   return (
     <div style={styles.container}>
-      <img src={imgUrl} />
-      <h1 style={styles.temperature}>{temp}</h1>
-      <p style={styles.details}>Humidity: {humidity}% <br></br>Wind: {windSpeed}mph</p>
+      <div style={styles.location}>
+        <h2 style={styles.temperature}>{location}</h2>
+      </div>
+      <div style={styles.subcontainer}>
+        <img src={imgUrl} />
+        <h1 style={styles.temperature}>{temp}</h1>
+        <p style={styles.details}>Humidity: {humidity}% <br></br>Wind: {windSpeed}mph</p>
+      </div>
     </div>
   );
 }

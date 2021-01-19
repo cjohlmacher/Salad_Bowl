@@ -22,7 +22,7 @@ const Filter = (props) => {
 
   return (
     <div style={styleFilter} onClick={handleClick}>
-      <p style={styles.text}>{topic}</p>
+      <p style={styles.text}>{topic.charAt(0).toUpperCase() + topic.slice(1)}</p>
     </div>
   );
 }
