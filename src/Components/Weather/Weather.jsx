@@ -24,7 +24,7 @@ const Weather = (props) => {
   };
 
   const fetchLocation = (lat,long) => {
-    const url = `http://www.mapquestapi.com/geocoding/v1/reverse?key=${process.env.REACT_APP_MAPQUEST_API_CLIENT_ID}&location=${lat},${long}`;
+    const url = `https://www.mapquestapi.com/geocoding/v1/reverse?key=${process.env.REACT_APP_MAPQUEST_API_CLIENT_ID}&location=${lat},${long}`;
     fetch(url)
     .then(response => {
       return response.json();
