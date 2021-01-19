@@ -1,4 +1,5 @@
 import { TOGGLE_NEWS_FILTER, TOGGLE_NEWS_LISTED, START_LOADING_NEWS, LOAD_NEWS_RESULTS } from '../actionTypes';
+import moment from 'moment-timezone';
 
 export function toggleNewsFilter(category) {
   return {
@@ -32,7 +33,8 @@ export function getNewsStories(categories) {
   return function(dispatch) {
     dispatch(startLoadingNews())
     const fetchPromises = categories.map(function (category) {
-      const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${process.env.REACT_APP_NEWS_API_CLIENT_ID}`;
+      const date = moment().format('YYYY-MM-DD');
+      const url = `http://api.mediastack.com/v1/news?access_key=${process.env.REACT_APP_NEWS_API_CLIENT_ID}&categories=${category}&languages=en,-de&date=${date}&sources=-sportsillustrated`;
 
       return fetch(url)
         .then(response => {

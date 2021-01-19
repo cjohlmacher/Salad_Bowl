@@ -7,6 +7,19 @@ const styles = {
   },
   container: {
     display: 'flex',
+    flexDirection: 'column',
+    margin: '5px 5px',
+    justifyContent: 'flex-start'
+  },
+  subcontainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    margin: '5px 5px',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  location: {
+    display: 'flex',
     flexDirection: 'row',
     margin: '5px 5px',
     alignItems: 'center',

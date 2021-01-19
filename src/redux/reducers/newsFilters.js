@@ -4,31 +4,31 @@ const initialState = {
   loading: false,
   newsStoryMap: {},
   newsFilters: {
-    "Technology": {
+    "technology": {
       active: true,
       listed: true,
     },
-    "Business": {
+    "business": {
         active: true,
         listed: true,
     },
-    "Entertainment": {
+    "entertainment": {
         active: true,
         listed: true,
     },
-    "Health": {
+    "health": {
         active: true,
         listed: true,
     },
-    "Sports": {
+    "sports": {
         active: true,
         listed: true,
     },
-    "Science": {
+    "science": {
         active: true,
         listed: true,
     },
-    "General": {
+    "general": {
         active: true,
         listed: true,
     },
@@ -54,9 +54,9 @@ const reducer = (state = initialState, action) => {
         ...state,
         newsFilters: {
           ...state.newsFilters,
-          [payload]: {
-            active: (state["newsFilters"][payload].listed ? false : true),
-            listed: !state["newsFilters"][payload].listed,
+          [payload.charAt(0).toLowerCase()+payload.slice(1)]: {
+            active: (state["newsFilters"][payload.charAt(0).toLowerCase()+payload.slice(1)].listed ? false : true),
+            listed: !state["newsFilters"][payload.charAt(0).toLowerCase()+payload.slice(1)].listed,
           },
         },
       };

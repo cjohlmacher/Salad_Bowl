@@ -8,7 +8,7 @@ const styles = {
   margin: '5px 5px',
   display: 'flex',
   justifyContent: 'space-around',
-  flexDirection: 'row',
+  flexDirection: 'column',
   flexWrap: 'wrap',
   overflow: 'auto',
   backgroundColor: 'lightblue',

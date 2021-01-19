@@ -23,12 +23,6 @@ const Menu = (props) => {
       <NavLink exact to="/settings" style={styles.link} activeStyle={styles.activeLink}>
         Customization
       </NavLink>
-      <NavLink exact to="/friends" style={styles.link} activeStyle={styles.activeLink}>
-        Friends List
-      </NavLink>
-      <NavLink exact to="/" style={styles.link} activeStyle={styles.activeLink}>
-        Log Out
-      </NavLink>
     </div>
   )
 };

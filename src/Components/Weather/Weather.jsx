@@ -9,23 +9,50 @@ const Weather = (props) => {
   } = props;
 
   const [weatherData, setWeatherData] = useState({});
+  const [locationData,setLocationData] = useState({});
 
-  useEffect(() => {
-    const url = `https://api.openweathermap.org/data/2.5/onecall?lat=37.804371&lon=-122.270798&units=imperial&exclude=minutely,hourly&appid=${process.env.REACT_APP_OPEN_WEATHER_MAP_CLIENT_ID}`
-
+  const fetchWeather = (lat,long) => {
+    const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=imperial&exclude=minutely,hourly&appid=${process.env.REACT_APP_OPEN_WEATHER_MAP_CLIENT_ID}`;
     fetch(url)
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        console.log(data);
-        setWeatherData(data);
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      setWeatherData(data);
+    });
+  };
+
+  const fetchLocation = (lat,long) => {
+    const url = `http://www.mapquestapi.com/geocoding/v1/reverse?key=${process.env.REACT_APP_MAPQUEST_API_CLIENT_ID}&location=${lat},${long}`;
+    fetch(url)
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      setLocationData(data);
+    })
+  }
+  
+  //Setup Default Location
+  let lat = 33;
+  let long = -120;
+  let location = 'San Francisco, CA';
+
+  //Fetch Location
+  useEffect(() => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(position => {
+        lat = position.coords.latitude;
+        long = position.coords.longitude;
+        fetchWeather(lat,long);
+        fetchLocation(lat,long);
       });
+    } else {
+        fetchWeather(lat,long);
+    };
   }, []);
-
-
-
-
 
   let weatherDescription = undefined;
   let weatherIcon = undefined;
@@ -34,7 +61,7 @@ const Weather = (props) => {
   let forecastTemp = undefined;
   let forecastTimeOfDay = undefined;
   let forecast = undefined;
-
+  
   //Determine whether forecast will show tonight or tomorrow's weather
   let curfew = 20;
 
@@ -73,9 +100,15 @@ const Weather = (props) => {
     forecast = findForecast(weatherData, curfew);
   }
 
+  if (Object.keys(locationData).length === 0) {
+  } else {
+    location = locationData?.results[0].locations[0].adminArea5+', '+locationData?.results[0].locations[0].adminArea3;
+  }
+
   return (
     <div style={styles}>
       <CurrentWeather
+        location={location}
         weather={weatherDescription}
         temp={Math.round(weatherData?.current?.temp) + '°F'}
         humidity={weatherData?.current?.humidity}

@@ -19,7 +19,7 @@ const SettingsList = (props) => {
     listEntries.push(
       <ListItem
         listHeader={listHeader}
-        listValue={listKeys[i]}
+        listValue={listKeys[i].charAt(0).toUpperCase()+listKeys[i].slice(1)}
         type={type}
         selectHandler={selectHandler}
         checked={currentKey.listed===true}

@@ -62,7 +62,7 @@ const NewsFeed = (props) => {
       newsStoryComponents = newsKeys.filter(function (category) {
         return newsFilters[category].active === true;
       }).map(function (category) {
-        return newsStoryMap[category].articles.slice(0, max_articles / activeFilterCount).map(function (story) {
+        return newsStoryMap[category].data.slice(0, max_articles / activeFilterCount).map(function (story) {
 
           const handleCommentButtonPress = () => {
             if (commentingNewsStoryId === story.url) {
@@ -124,9 +124,9 @@ function mapDispatchToProps(dispatch) {
     handleFilterClick(category) {
       dispatch(toggleNewsFilter(category));
     },
-    // loadNewsStories(categories) {
-    //   dispatch(getNewsStories(categories))
-    // },
+    loadNewsStories(categories) {
+      dispatch(getNewsStories(categories))
+    },
   };
 };
 
