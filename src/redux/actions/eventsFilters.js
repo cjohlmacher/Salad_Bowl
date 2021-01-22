@@ -38,7 +38,6 @@ export function getEvents() {
         return response.json();
       })
       .then(data => {
-        console.log(data);
         dispatch(loadEventResults(data));
       });
   };

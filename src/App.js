@@ -37,7 +37,8 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <Header
-          headline="Salad Bowl: Fresh News and Events"
+          headline="Salad Bowl"
+          tagline="Fresh News & Events"
         >
           <PopUpIcon
             tag="fas fa-bars"

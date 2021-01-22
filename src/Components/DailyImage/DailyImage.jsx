@@ -30,7 +30,6 @@ const DailyImage = (props) => {
         return response.json();
       })
       .then(data => {
-        console.log(data);
         setDailyImageData(data);
       });
   }, []);

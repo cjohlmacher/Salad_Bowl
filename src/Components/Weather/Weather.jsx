@@ -18,7 +18,6 @@ const Weather = (props) => {
       return response.json();
     })
     .then(data => {
-      console.log(data);
       setWeatherData(data);
     });
   };
@@ -30,7 +29,6 @@ const Weather = (props) => {
       return response.json();
     })
     .then(data => {
-      console.log(data);
       setLocationData(data);
     })
   }
@@ -48,7 +46,7 @@ const Weather = (props) => {
         long = position.coords.longitude;
         fetchWeather(lat,long);
         fetchLocation(lat,long);
-      });
+      },fetchWeather(lat,long));
     } else {
         fetchWeather(lat,long);
     };
