@@ -5,7 +5,7 @@ import styles from './styles'
 import NewsStory from '../NewsStory';
 import Filter from '../Filter';
 import FilterBar from '../FilterBar';
-import { toggleNewsFilter, getNewsStories } from '../../redux/actions/newsFilters';
+import { toggleNewsFilter, getNewsStoriesFromCurrents } from '../../redux/actions/newsFilters';
 
 const NewsFeed = (props) => {
   const {
@@ -125,7 +125,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(toggleNewsFilter(category));
     },
     loadNewsStories(categories) {
-      dispatch(getNewsStories(categories))
+      dispatch(getNewsStoriesFromCurrents(categories))
     },
   };
 };

@@ -29,7 +29,7 @@ export function loadNewsResults(newsStoryMap) {
   }
 }
 
-export function getNewsStories(categories) {
+export function getNewsStoriesFromMediastack(categories) {
   return function(dispatch) {
     dispatch(startLoadingNews())
     const fetchPromises = categories.map(function (category) {
@@ -57,10 +57,40 @@ export function getNewsStories(categories) {
   };
 };
 
+export function getNewsStoriesFromCurrents(categories) {
+  return function(dispatch) {
+    dispatch(startLoadingNews())
+
+    const fetchPromises = categories.map(function (category) {
+      const date = moment().format('YYYY-MM-DD');
+      const url = `https://api.currentsapi.services/search?language=en&category=${category}&apiKey=${process.env.REACT_APP_NEWS_CURRENTS_API_CLIENT_ID}`;
+
+      return fetch(url)
+        .then(response => {
+          return response.json();
+        });
+    });
+
+    Promise.all(fetchPromises)
+      .then((data) => {
+        const modifiedNewsStoryState = data.reduce((accNewsStoryState, datum, index) => {
+          const modified = {
+            ...accNewsStoryState,
+            [categories[index]]: datum
+          };
+
+          return modified;
+        }, {});
+        dispatch(loadNewsResults(modifiedNewsStoryState));
+      });
+  };
+};
+
 export default {
   toggleNewsFilter,
   toggleNewsListed,
   startLoadingNews,
   loadNewsResults,
-  getNewsStories,
+  getNewsStoriesFromMediastack,
+  getNewsStoriesFromCurrents,
 };
