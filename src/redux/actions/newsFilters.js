@@ -34,7 +34,8 @@ export function getNewsStoriesFromMediastack(categories) {
     dispatch(startLoadingNews())
     const fetchPromises = categories.map(function (category) {
       const date = moment().format('YYYY-MM-DD');
-      const url = `https://api.mediastack.com/v1/news?access_key=${process.env.REACT_APP_NEWS_API_CLIENT_ID}&categories=${category}&languages=en,-de&date=${date}&sources=-sportsillustrated`;
+      const corsProxy = process.env.REACT_APP_CORS_PROXY;
+      const url = `${corsProxy}/https://api.mediastack.com/v1/news?access_key=${process.env.REACT_APP_NEWS_API_CLIENT_ID}&categories=${category}&languages=en,-de&date=${date}&sources=-sportsillustrated`;
 
       return fetch(url)
         .then(response => {
