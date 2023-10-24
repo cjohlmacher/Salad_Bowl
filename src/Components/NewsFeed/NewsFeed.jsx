@@ -62,7 +62,7 @@ const NewsFeed = (props) => {
       newsStoryComponents = newsKeys.filter(function (category) {
         return newsFilters[category].active === true;
       }).map(function (category) {
-        return newsStoryMap[category].data.slice(0, max_articles / activeFilterCount).map(function (story) {
+        return newsStoryMap[category].slice(0, max_articles / activeFilterCount).map(function (story) {
 
           const handleCommentButtonPress = () => {
             if (commentingNewsStoryId === story.url) {

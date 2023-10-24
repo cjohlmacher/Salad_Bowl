@@ -47,7 +47,7 @@ export function getNewsStoriesFromMediastack(categories) {
         const modifiedNewsStoryState = data.reduce((accNewsStoryState, datum, index) => {
           const modified = {
             ...accNewsStoryState,
-            [categories[index]]: datum
+            [categories[index]]: datum.data
           };
 
           return modified;
@@ -77,7 +77,7 @@ export function getNewsStoriesFromCurrents(categories) {
         const modifiedNewsStoryState = data.reduce((accNewsStoryState, datum, index) => {
           const modified = {
             ...accNewsStoryState,
-            [categories[index]]: datum
+            [categories[index]]: datum.news
           };
 
           return modified;
