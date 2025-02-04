@@ -13,7 +13,6 @@ import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
 const CurrentWeather = (props) => {
   const {
     location,
-    weather,
     temp,
     humidity,
     windSpeed,
@@ -22,6 +21,10 @@ const CurrentWeather = (props) => {
 
   let imgUrl = (icon != undefined) ? `https://openweathermap.org/img/wn/${icon}@2x.png` : 'https://openweathermap.org/img/wn/10d@2x.png';
 
+  const displayTemp = temp ? `${Math.round(temp)}°F` : '--';
+  const displayHumidity = humidity || '--';
+  const displayWindSpeed = windSpeed ? `${Math.round(windSpeed)}` : '--';
+  
   return (
     <div style={styles.container}>
       <div style={styles.location}>
@@ -29,8 +32,8 @@ const CurrentWeather = (props) => {
       </div>
       <div style={styles.subcontainer}>
         <img src={imgUrl} />
-        <h1 style={styles.temperature}>{temp}</h1>
-        <p style={styles.details}>Humidity: {humidity}% <br></br>Wind: {windSpeed}mph</p>
+        <h1 style={styles.temperature}>{displayTemp}</h1>
+        <p style={styles.details}>Humidity: {displayHumidity}% <br></br>Wind: {displayWindSpeed}mph</p>
       </div>
     </div>
   );

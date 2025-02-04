@@ -31,6 +31,7 @@ const NewsFeed = (props) => {
 
     return (
       <Filter
+        key={filterName}
         active={currentFilterValue}
         onToggleFilter={handleFilterClick}
         topic={filterName}
@@ -82,6 +83,7 @@ const NewsFeed = (props) => {
 
           return (
             <NewsStory
+              key={story.url}
               headlineTitle={story.title}
               storyUrl={story.url}
               headlineSubtitle={story.author}
