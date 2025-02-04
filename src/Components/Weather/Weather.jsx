@@ -11,26 +11,46 @@ const Weather = (props) => {
   const [weatherData, setWeatherData] = useState({});
   const [locationData,setLocationData] = useState({});
 
-  const fetchWeather = (lat,long) => {
-    const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=imperial&exclude=minutely,hourly&appid=${process.env.REACT_APP_OPEN_WEATHER_MAP_CLIENT_ID}`;
-    fetch(url)
-    .then(response => {
-      return response.json();
-    })
-    .then(data => {
+  const getWeather = (lat, long) => {
+    fetchWeather(lat, long);
+  }
+
+  const getLocation = (lat, long) => {
+    fetchLocation(lat, long);
+  }
+
+  const fetchWeather = async (lat,long) => {
+    try {
+      const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=imperial&exclude=minutely,hourly&appid=${process.env.REACT_APP_OPEN_WEATHER_MAP_CLIENT_ID}`;
+      const response = await fetch(url);
+      
+      if (response && response.status === 401) {
+        throw new Error('401 Authentication Error');
+      }
+
+      const data = response.json();
       setWeatherData(data);
-    });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const fetchLocation = (lat,long) => {
-    const url = `https://www.mapquestapi.com/geocoding/v1/reverse?key=${process.env.REACT_APP_MAPQUEST_API_CLIENT_ID}&location=${lat},${long}`;
-    fetch(url)
-    .then(response => {
-      return response.json();
-    })
-    .then(data => {
-      setLocationData(data);
-    })
+    try {
+      const url = `https://www.mapquestapi.com/geocoding/v1/reverse?key=${process.env.REACT_APP_MAPQUEST_API_CLIENT_ID}&location=${lat},${long}`;
+      fetch(url)
+      .then(response => {
+        if (response && response.status === 401) {
+          throw new Error('401 Authentication Error');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setLocationData(data);
+      })
+    } catch (err) {
+      console.error(err);
+    }
   }
   
   //Setup Default Location
@@ -44,11 +64,11 @@ const Weather = (props) => {
       navigator.geolocation.getCurrentPosition(position => {
         lat = position.coords.latitude;
         long = position.coords.longitude;
-        fetchWeather(lat,long);
-        fetchLocation(lat,long);
-      },fetchWeather(lat,long));
+        getWeather(lat,long);
+        getLocation(lat,long);
+      }, getWeather(lat,long));
     } else {
-        fetchWeather(lat,long);
+        getWeather(lat,long);
     };
   }, []);
 
@@ -91,31 +111,36 @@ const Weather = (props) => {
     }
   };
 
-  if (Object.keys(weatherData).length === 0) {
-  } else {
+  if (Object.keys(weatherData).length !== 0) {
     weatherDescription = weatherData.current.weather[0].main;
     weatherIcon = weatherData.current.weather[0].icon;
     forecast = findForecast(weatherData, curfew);
   }
 
-  if (Object.keys(locationData).length === 0) {
-  } else {
+  if (Object.keys(locationData).length !== 0) {
     location = locationData?.results[0].locations[0].adminArea5+', '+locationData?.results[0].locations[0].adminArea3;
   }
+
+  const currentWeather = weatherData?.current || {};
+  const {
+    temperature: currentTemp, 
+    humidity: currentHumidity, 
+    wind_speed: currentWindSpeed
+  } = currentWeather;
 
   return (
     <div style={styles}>
       <CurrentWeather
         location={location}
         weather={weatherDescription}
-        temp={Math.round(weatherData?.current?.temp) + '°F'}
-        humidity={weatherData?.current?.humidity}
-        windSpeed={Math.round(weatherData?.current?.wind_speed)}
+        temp={currentTemp}
+        humidity={currentHumidity}
+        windSpeed={currentWindSpeed}
         icon={weatherIcon}
       />
       <Forecast
         forecastWeather={forecast?.forecastDescription}
-        forecastTemp={Math.round(forecast?.forecastTemp) + '°F'}
+        forecastTemp={forecast?.forecastTemp}
         forecastIcon={forecast?.forecastIcon}
         forecastTimeOfDay={forecast?.forecastTimeOfDay}
       />

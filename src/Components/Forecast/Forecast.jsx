@@ -9,7 +9,6 @@ import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
 
 const Forecast = (props) => {
   const {
-    forecastWeather,
     forecastTemp,
     forecastIcon,
     forecastTimeOfDay,
@@ -26,11 +25,13 @@ const Forecast = (props) => {
     forecastHeader = "Upcoming:"
   }
 
+  const displayTemp = forecastTemp ? `${Math.round(forecastTemp)}°F` : '--';
+
   return (
     <div style={styles.container}>
       <h2>{forecastHeader}</h2>
       <img src={imgUrl} />
-      <h1 style={styles.forecastTemp}>{forecastTemp}</h1>
+      <h1 style={styles.forecastTemp}>{displayTemp}</h1>
     </div>
   );
 }

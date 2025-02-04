@@ -62,7 +62,6 @@ export function getNewsStoriesFromCurrents(categories) {
     dispatch(startLoadingNews())
 
     const fetchPromises = categories.map(function (category) {
-      const date = moment().format('YYYY-MM-DD');
       const corsProxy = process.env.REACT_APP_CORS_PROXY;
       const url = `${corsProxy}/https://api.currentsapi.services/v1/search?language=en&category=${category}&apiKey=${process.env.REACT_APP_NEWS_CURRENTS_API_CLIENT_ID}`;
 

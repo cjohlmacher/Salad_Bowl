@@ -51,6 +51,7 @@ const EventFeed = (props) => {
 
     return (
       <Filter
+        key={eventCategory}
         active={currentFilterValue}
         onToggleFilter={handleFilterClick}
         topic={eventCategory}
